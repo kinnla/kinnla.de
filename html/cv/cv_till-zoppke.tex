@@ -1,0 +1,333 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Friggeri Resume/CV
+% XeLaTeX Template
+% Version 1.2 (3/5/15)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Adrien Friggeri (adrien@friggeri.net)
+% https://github.com/afriggeri/CV
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Important notes:
+% This template needs to be compiled with XeLaTeX and the bibliography, if used,
+% needs to be compiled with biber rather than bibtex.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[]{friggeri-cv} % Add 'print' as an option into the square bracket to remove colors from this template for printing
+
+\usepackage{fontspec}
+\newfontfamily{\FA}[Path = ./]{fontawesome-webfont}
+\def\faTwitter{\FA\symbol{"F099}}
+\def\faKey{\FA\symbol{"F084}}
+\def\faEnvelope{\FA\symbol{"F0E0}}
+\def\faHome{\FA\symbol{"F015}}
+\def\faGithub{\FA\symbol{"F09B}}
+\def\faSkype{\FA\symbol{"F17E}}
+\def\faTrello{\FA\symbol{"F181}}
+\def\faSlack{\FA\symbol{"F198}}
+\def\faSlack{\FA\symbol{"F198}}
+
+\definecolor{dark-gray}{gray}{0.3}
+
+\addbibresource{bibliography.bib} % Specify the bibliography file to include publications
+
+\begin{document}
+
+\header{t~i~l~l~~}{zoppke}{computer scientist, teacher} % Your name and current job title/field
+
+%----------------------------------------------------------------------------------------
+%	SIDEBAR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{aside} % In the aside, each new line forces a line break
+\section{contact}
+\href{http://kinnla.de}{{\color{dark-gray}\faHome} kinnla.de}
+\href{mailto:kinnla@posteo.de}{{\color{dark-gray}\faEnvelope} kinnla@posteo.de}
+\href{https://keybase.io/kinnla}{{\color{dark-gray}\faKey} keybase.io/kinnla}
+\href{https://twitter.com/kinnla}{{\color{dark-gray}\faTwitter} kinnla}
+{\color{dark-gray}\faSkype} kinnla
+%
+\section{languages}
+german mother tongue
+english fluent
+spanish intermediate
+russian intermediate
+mandarin basic
+latinum
+grecum
+%
+\section{programming}
+\href{https://github.com/kinnla}{{\color{dark-gray}\faGithub} kinnla}
+%{\color{red} $\varheartsuit$} JavaScript
+java, c\#, c++, c, assembler, python, haskell, lua, xml, \LaTeX
+%
+\section{tools}
+eclipse, visualstudio, git, slack, trello, sakai, moodle, ushahidi, civicrm
+%
+\section{it security}
+pgp, keybase, jitsi, wire, signal, veracrypt, syncthing, tor
+%
+\section{professional interests}
+artificial intelligence
+programming games
+visual programming
+history of computing
+surveillance policy
+human rights
+%
+\section{personal interests}
+traveling, diving, photography, s-pedelecs, zen-meditation
+%
+\end{aside}
+
+%	PROFESSIONAL EXPERIENCE
+\section{professional experience}
+
+\begin{entrylist}
+
+\entry
+{since 2016}
+{Gymnasium Tiergarten}
+{Berlin}
+{\emph{High School Teacher (part time)}\\
+Majors: Computer Science and Mathematics\\
+Teaching obligation: 13 hours per week\\
+Data Security Analysis of the school's IT
+}
+
+\entry
+{2012--2016}
+{Freie Universität Berlin, Institut für Informatik}
+{Berlin}
+{\emph{Research Assistant (part time)}\\
+Programming Languages Working Group, Prof. Fehr \& Prof. Esponda\\
+Teaching, Supervision of Bachelor- and Master-theses\\
+Coordination of the freshmen program
+}
+
+\entry
+{2009--2011}
+{Freie Universität Berlin, Institut für Informatik}
+{Berlin}
+{\emph{Research Assistant}\\
+Artificial Intelligence Working Group, Prof. Rojas\\
+Research in Autonomous Cars, Team Lead 3D sensors\\
+Development of the RADAR sensor integration\\
+Fundraising
+}
+
+\entry
+{2008--2009}
+{IAV Ltd.}
+{Shanghai, China}
+{\emph{Development Engineer}\\
+Development of a navigation system for FAW-VW, Changchun\\
+Coordination with the system supplier and Volkswagen Germany\\
+Test and defect management, Integration of a mobile adapter
+}
+
+\entry
+{2005--2008}
+{IAV GmbH}
+{Munich}
+{\emph{Systems Engineer}\\
+Specification of a Human Machine Interface (HMI) for BMW\\
+Coordination of the HMI behavior among related departments\\
+  (Usability, Software Engineering, Project Management, Test etc.)
+}
+
+\entry
+{2005}
+{TeleClix GmbH}
+{Potsdam-Babelsberg}
+{\emph{Java Developer}\\
+Development of interactive TV applications
+}
+
+\end{entrylist}
+
+%	ACTIVITIES AS A STUDENT
+\section{activities as a student}
+\begin{entrylist}
+\entry{2004--2005}{Working Student~~~\normalfont{C\# Development}}{IAV GmbH, Berlin}{\vspace{-4mm}}
+\entry{2002--2004}{Tutor~~~\normalfont{Teaching}}{Freie Universität Berlin}{\vspace{-4mm}}
+\entry{2001--2002}{Freelancer~~~\normalfont{Java GUI Development}}{Ivistar Communication Systems AG, Berlin}{\vspace{-4mm}}
+\entry{2000--2001}{Java Developer~~~\normalfont{Natural Language Processing}}{SemanticEdge GmbH, Berlin}{\vspace{-4mm}}
+\entry{01-08/2000}{Student Assistant~~~\normalfont{Java GUI Development}}{Telematics Institute, Trier}{\vspace{-4mm}}
+\entry{09/1999}{Intern~~~\normalfont{Editorial Department}}{Journal ``Info3'', Frankfurt a.M.}{\vspace{-4mm}}
+\entry{08-09/1998}{Intern~~~\normalfont{Stage Lighting}}{Prometheus Lighting, Kassel}{\vspace{-4mm}}
+\end{entrylist}
+
+\pagebreak
+
+%	EDUCATION
+\section{education}
+\begin{entrylist}
+
+\entry
+{since 2016}
+{Training as High School Teacher}
+{Senatsverwaltung Berlin}
+{Majors: Computer Science and Mathematics\\
+State Examination expected in January 2018
+}
+
+\entry
+{2000--2005}
+{Computer Science}
+{Freie Universität Berlin}
+{Main focus: neural networks, history of computing, algorithms\\
+Diploma thesis ``Simulating the ENIAC as a Java Applet''\\
+graduation as ``Diplom-Informatiker'', grade B+ (1.7)
+}
+
+\entry
+{1994--2000}
+{German \& Russian Literature, Mathematics}
+{Universität Trier}
+%{Intermediate Examination, grade B+ (1.7)}
+{Peter Handke, Anton Chekhov, Hyperfiction, Metaphor Theory}
+
+\entry
+{1993--1994}
+{Anthroposophical Study}
+{Novalis Hochschulverein, Kamp-Lintfort}
+{Philosophy, Art of Painting, Craftsmanship}
+
+\entry
+{1991--1993}
+{Civil Service}
+{Troxler Schule, Wuppertal}
+{Assistant Teacher for mentally challenged children}
+
+\entry
+{before 1991}
+{High School}
+{Wilhelm-Dörpfeld-Gymnasium, Wuppertal}
+{University Entrance Qualification, grade C+ (2.7)}
+
+\end{entrylist}
+
+%	VOLUNTARY COMMITMENT
+\section{voluntary commitment}
+
+\begin{entrylist}
+
+\entry
+{since 2014}
+{Founding member of the IT Security Working Group}
+{Peace Brigades International (pbi)}
+{IT Security Consultancy, Facilitating Conference Calls}
+
+\entry
+{2013--2016}
+{Member of the Nepal Monitor Project Committee}
+{Peace Brigades International (pbi)}
+{Finance, IT, joint Supervising and Steering of the Project}
+
+\entry
+{2010--2013}
+{Board Member}
+{Kwan Um School of Zen, Germany}
+{Treasurer, Secretary, IT administration}
+
+\entry
+{since 2009}
+{Electoral Assistant}
+{Wahlamt Berlin Mitte}
+{Director of a Polling Station}
+
+\end{entrylist}
+
+
+%	TRAINING (SELECTION)
+\section{training \normalfont{(selection)}}
+
+\begin{entrylist}
+
+\entry
+{2014--2016}
+{\normalfont University Teaching Certificate}
+{Freie Universität Berlin}
+{\vspace{-4mm}}
+
+\entry
+{04/2014}
+{\normalfont IT Security Training (organizer)}
+{Peace Brigades International (pbi), Hamburg}
+{\vspace{-4mm}}
+
+\entry
+{11/2012}
+{\normalfont Professional Peace Work}
+{Akademie für Konflikttransformation, Bonn}
+{\vspace{-4mm}}
+
+\entry
+{04/2012}
+{\normalfont Volunteer Training for Nepal}
+{Peace Brigades International (pbi), Spain}
+{\vspace{-4mm}}
+
+\entry
+{2010--2011}
+{\normalfont Business plan competition}
+{Berlin-Brandenburg}
+{\vspace{-4mm}}
+
+\entry
+{10-12/2010}
+{\normalfont Moderation und Management}
+{artop Institut, Berlin}
+{\vspace{-4mm}}
+
+\end{entrylist}
+
+%	INTERNATIONAL EXPERIENCE (SELECTION)
+
+\section{international experience \normalfont{(selection)}}
+
+\begin{entrylist}
+
+\entry
+{09-12/2011}
+{\normalfont Traveling}
+{Nepal, India, Sri Lanka}
+{\vspace{-4mm}}
+
+\entry
+{2008--2009}
+{\normalfont Development Engineer for FAW-VW}
+{Changchun, China}
+{\vspace{-4mm}}
+
+\entry
+{08-09/2002}
+{\normalfont Visiting Student}
+{HUST University, Wuhan, China}
+{\vspace{-4mm}}
+
+\entry
+{03-09/1993}
+{\normalfont Traveling}
+{Greece, Italy}
+{\vspace{-4mm}}
+
+\end{entrylist}
+
+
+%	PUBLICATIONS
+
+%\section{publications}
+%\begin{entrylist}
+%\entry{2010}{}{\vspace{-4.15mm}}{\emph{Konrad Zuse and his Computing Machines}it -- Information Technology 52}
+%\entry{2006}{}{\vspace{-4.15mm}}{\emph{The Virtual Life of ENIAC: Simulating the Operation of the First Electronic Computer}IEEE Annals of the History of Computing (Co-author)}
+%\end{entrylist}
+
+\end{document}
