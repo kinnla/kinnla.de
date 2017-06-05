@@ -1,2 +1,10 @@
 www.zorinaq.com
 
+# latex
+*.aux
+*.bcf
+*.log
+*.out
+*.run.xml
+*.sunctex.gz
+
