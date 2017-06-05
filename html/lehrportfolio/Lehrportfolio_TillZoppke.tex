@@ -1,0 +1,183 @@
+% !TEX program = xelatex
+% !Mode:: "TeX:UTF-8"
+\documentclass[11pt,ngerman]{article}
+\usepackage[a4paper, total={15.4cm, 24cm}]{geometry}
+\usepackage{babel}
+\usepackage{fontspec}
+\usepackage{longtable}
+
+\begin{document}
+
+\title{Lehrportfolio Till Zoppke}
+\maketitle
+
+\section{Lehrphilosophie}
+Im Rahmen meiner Lehrtätigkeit an der Freien Universität habe ich per dato 25 Lehrveranstaltungen durchgeführt. Zielgruppen sind Studierende im Bachelor und Master Informatik und Informatik-Lehramt sowie an Informatik interessierte Schülerinnen und Schüler.
+
+Im Rahmen des Frühstudiums \emph{ProInformatik} können Schülerinnen und Schüler während der Schulsommerferien oder im Anschluss an ihr Abitur ins Informatikstudium hineinschnuppern. Die fünf- bis sechswöchige Blockveranstaltungen sind auf ein späteres Informatikstudium anrechenbar. Diese Zielgruppe besitzt uneinheitliches Vorwissen und hat keine Erfahrung mit universitärer Lehre. In meiner Vorlesung \emph{Objektorientierte Programmierung} lege ich daher Wert auf einen flache Lernkurve und eine gute Betreuung, mit Gelegenheiten zur Wiederholung. Studienanfängern biete ich mit dem Brückenkurs zu Beginn des Wintersemesters eine umfassende Einführung in den Lebens- und Arbeitsbereich Universität. In Vorlesungen, Fragestunden, Workshops und beim Feiern kommen die Studienanfänger untereinander und mit anderen Mitgliedern des Fachbereichs in Kontakt.
+
+In meinen Lehrveranstaltungen gebe ich Strukturen vor (bei Softwareprojekten z.B. einen Terminplan, Frameworks und Werkzeuge zur Kollaboration). Den auf diese Weise aufgespannten Freiraum gestalten die Teilnehmenden selbst und nutzen ihn kreativ, indem sie sich eigene Ziele setzen und selbständig Probleme lösen. Die so erworbenen sozialen und kommunikative Kompetenzen sind für den weiteren Lebens- und Berufsweg der Studierenden wertvoller als Detailkenntnisse in Technologien, die morgen schon obsolet sein können. Meine eigene Arbeitsweise folgt demselben humanistischen Bildungsideal: viele Veranstaltungen plane ich gemeinsam mit Kollegen und Tutor\_innen, und führe sie mit Team-Teaching durch; ich lade externe Vortragende ein und kooperiere mit Unternehmen.
+
+\section{Lehrpraxis}
+Inhaltliche Schwerpunkte meiner Lehre sind Programmiersprachen, Software-Entwicklung, E-Learning und die Geschichte des Computers. Ich strebe an, jede Veranstaltung mindestens drei mal durchzuführen und mich bei jeder Iteration zu verbessern. Aufgabenstellungen und Vortragsthemen erarbeite ich jedesmal aufs Neue. 
+
+Informatik ist eine Disziplin der Ingenieurwissenschaften und befasst sich mit dem Lösen informationstechnischer Probleme. Informationstechnologie steht als treibende Kraft hinter der Digitalen Revolution, weshalb den Informatikern eine besondere gesellschaftliche Verantwortung zufällt. Um es mit Frank Schirrmacher zu sagen: ``Die Informatiker müssen aus den Nischen in die Mitte der Gesellschaft geholt werden.'' Um das Verantwortungsbewusstsein der Studierenden zu entwickeln. thematisiere ich z.B. den Hochfrequenzhandel auf Finanzmärkten, den US-Drohnenkrieg oder Stadtplanung. Auch (nerd-)kulturelle Themen wie Interactive Fiction, historische Computerspiele oder esoterische Programmiersprachen fördern den Blick über den Tellerrand.
+  
+Im Folgenden greife ich zwei Veranstaltungen beispielhaft heraus. Eine vollständige Liste meiner Veranstaltungen findet sich in Abschnitt 6.
+
+\subsection{Softwareprojekt Übersetzerbau}
+In dieser auf der Vorlesung Übersetzerbau aufbauenden Wahlpflichtveranstaltung entwickeln die Teilnehmenden einen Compiler im Team. Die konkrete Ausgestaltung der Veranstaltung plante ich gemeinsam mit Leon Bornemann, der die Veranstaltung im Jahr zuvor besucht hatte. 
+
+Wir entschieden uns, den Teilnehmenden freie Wahl bei der Implementierungssprache zu lassen und danach die Gruppen zu bilden. Es ergaben sich drei Gruppen mit sechs bis acht Teilnehmenden. Eine Gruppe wählte die open-source Programmiersprache ``Rust'', die damals erst in einer Alpha-Version vorlag. Diese Gruppe zeigte sich besonders motiviert und erzielte hervorragende Ergebnisse.
+
+Als Vorgehensmodell gaben wir Scrum und einen für alle Gruppen identischen Terminplan mit fünf Sprints von zwei bis drei Wochen vor. Die Gruppen einigten sich auf eine Featureliste, schätzten die Aufwände und setzten sich für jeden Sprint eigene Ziele. Ergänzend trugen zwei Mitarbeiter von GameDuell GmbH den Teilnehmenden vor, wie Scrum in der Spieleentwicklung gehandhabt wird.
+\noindent
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{ l | l }
+  \hline			
+  Durchgeführt im & Sommersemester 2015 \\
+  \hline			
+  Präsenzstudium & 4 Semesterwochenstunden\\
+  \hline			
+  Teilnehmende & 22 Studierende im Bachelor und Master Informatik\\
+  \hline			
+  Tutor & Leon Bornemann (Master-Student Informatik)\\
+  \hline
+  Lernziele & - Anwendungswissen in Compilerbau\\[-2mm]
+  & - Kenntnis grundlegender Methoden des Software-Engineering\\[-2mm]
+  & - Fähigkeit, Methoden des Projektmanagements anzuwenden\\[-2mm]
+  & - Erwerb einer neuen Programmiersprache\\
+  \hline  
+  Inhalte & - Entwicklung eines Compilers im Team\\[-2mm]
+  & - Quellsprache: Twee (Domänenspezifische Sprache für Hyperfiction)\\[-2mm]
+  & - Zielsprache: Z-Code (Virtuelle Maschine für Text Adventures)\\[-2mm]
+  & - Implementierungssprache: freigestellt\\[-2mm]
+  & - Vorgehensmodell: Scrum\\[-2mm]
+  & - Versionsverwaltung: git (github)\\
+  \hline
+  Unterrichtsformen & - Vortrag des Dozenten\\[-2mm]
+  & - Gastvortrag über Scrum\\[-2mm]
+  & - Kurzreferate\\[-2mm]
+  & - Gruppenarbeit\\[-2mm]
+  & - Standup-Meetings\\[-2mm]
+  & - Milestone- bzw. Abschlusspräsentationen\\[-2mm]
+  & - Rücksprachen\\
+  \hline
+  Leistungen & - Referat (in einer Zweiergruppe)\\[-2mm]
+  & - Mitarbeit im Projekt (in einer Gruppe von 6-8 Personen) \\[-2mm]
+  & - Mitwirkung an einer Milestone-Präsentation\\
+  \hline
+  Leistungspunkte & 10 ECTS\\
+%  \hline
+%  Evaluation & Online-Evaluation des Fachbereichs\\
+\end{longtable}
+
+\subsection{Proseminar: Geschichte des Computers}
+Das Proseminar soll die Studierenden auf die Anfertigung und Verteidigung ihrer Bachelorarbeit vorbereiten. Jede/r Teilnehmende erarbeitet ein Thema selbständig anhand einer Aufgabenstellung, hält einen Vortrag im Plenum und fertigt eine schriftliche Ausarbeitung an. Forschungsgegenstand der Geschichte des Computers sind Technologien im historischen Kontext und Zusammenhänge mit anderen geschichtlichen Entwicklungen. Die Veranstaltung wurde gemeinsam mit Julian Röder konzipiert und an einem verlängerten Wochenende durchgeführt.
+%\par\medskip
+\noindent \begin{longtable}{ l | p{11.5cm} }
+%  \hline			
+ %   Motto & \glqq Die Informatiker müssen aus den Nischen in die Mitte der Gesellschaft geholt werden.\grqq ~(Frank Schirrmacher)\\ 
+  \hline			
+    Durchgeführt im & Sommersemester 2015 \\ 
+  \hline
+    Gemeinsam mit & Julian Röder (M.A. Wissenschafts- u. Technikgeschichte)\\
+  \hline
+    Präsenzstudium & Blockseminar, drei Tage \\ 
+  \hline
+    Teilnehmende & 19 Studierende im Bachelor Informatik \\ 
+  \hline
+    Lernziele & - Fähigkeit, ein wissenschaftliches Thema zu erarbeiten\\[-2mm]
+        & - Beherrschung von Vortrags- und Präsentationstechniken\\[-2mm]
+        & - Wissen, was zu einer wissenschaftlichen Ausarbeitung gehört\\
+  \hline
+    Inhalte & 1. Spieltheorie (2 Themen)\\[-2mm]
+        & 2. Frühe Gaming Hardware (3 Themen)\\[-2mm]
+        & 3. Konstitutive Design-Elemente von Computerspielen (5 Themen)\\[-2mm]
+        & 4. Adventure und Role-Playing Games (6 Themen)\\[-2mm]
+        & 5. Simulation und Wirklichkeit (4 Themen)\\
+  \hline
+  Unterrichtsformen & - Vortrag des Dozenten\\[-2mm]
+  & - Referate und Diskussion\\[-2mm]
+  & - Gemeinsames Befüllen eines Zeitstrahls\\[-2mm]
+  & - Exkursion ins Computerspielemuseum Berlin-Friedrichshain\\
+  \hline
+  Leistungen & - Referat (30 Minuten + 15 Minuten Diskussion)\\[-2mm]
+  & - Schriftliche Ausarbeitung (bis zu 10 Textseiten)\\
+  \hline
+  Leistungspunkte & 3 ECTS\\
+%  \hline
+%  Evaluation & Online-Evaluation des Fachbereichs\\
+\end{longtable}
+
+\section{Forschung und Lehre}
+Ein Schwerpunkt meiner Forschung sind Programmierspiele. In einem Programmierspiel agiert der Spieler nicht direkt in der Spielwelt, sondern schreibt ein Programm, das die Steuerung einer Spielfigur übernimmt. Hier verbinden sich zwei für meine Lehrphilosophie wichtige Paradigmen: Problemorientiertes Lernen und spielerische Motivation. Bei den Problemstellungen und den zur Lösung zu verwendenden Programmiersprachen gibt es eine große Bandbreite. Im Vergleich zu klassischen Übungsaufgaben skalieren Programmierspiele sehr gut über die Fähigkeiten und den zeitlichen Einsatz der Lernenden. Sie bekommen zudem über ihr Abschneiden im Spiel eine direkte Rückmeldung zu ihrer Lösung.
+
+Programmierspiele setze ich vielfältig in der Lehre ein -- als Workshop im Rahmen des Brückenkurses oder als Projektwoche zum Abschluss der Vorlesung ``ProInformatik III''. Für das Proseminar ``Programmierspiele'' erweitere ich das klassische Schema eines Proseminars: Jeweils zwei Studierende übernehmen ein Programmierspiel und leiten die anderen Teilnehmenden bei der Erstellung Lösungen an. In der darauffolgenden Woche wird mit den Lösungen ein Wettbewerb durchgeführt. Zusätzlich zu den üblichen Lernzielen eines Proseminars (Erarbeitung eines Themas, Präsentation und schriftliche Ausarbeitung) lernen die Teilnehmenden, andere Studierende anzuleiten, und setzen sich durch das Programmieren von Lösungen tiefer mit den Themen auseinander als durch passives Rezipieren eines Seminarvortrags.
+
+\section{Sonstige Aktivitäten und Engagement für die Lehre}
+
+Wie bereits in Abschnitt 1 erwähnt, ist es mir ein Anliegen, Schülerinnen und Schüler für ein Informatik-Studium an der Freien Universität zu werben und Ihnen den Einstieg zu erleichtern. Über meine universitäre Lehre hinaus habe ich folgende Aktivitäten durchgeführt:
+
+\begin{itemize}
+\item Leitung von Workshops beim Girls' Day 2015 \& 2016
+\item Entwicklung von Online-Studienfachwahl-Assistenten (OSA) für die Studiengänge Informatik in Kooperation mit dem Zentrum für Digitale Systeme (CeDiS) der Freien Universität
+\item Evaluation von Peer-Reviews mit Hilfe der Lernplattform Sakai
+\item Vortrag beim Science-Slam im Rahmen der Langen Nacht der Wissenschaften 2015
+\item Konzeption und Durchführung einer Online-Umfrage unter den Studienanfänger\_innen des Wintersemesters 2015/16
+\item Vertretung des Instituts für Informatik bei den inFU:tagen 2016
+\item Organisation eines Hubs beim Programmierwettbewerb google hash Code 2016
+\item Leitung eines Informationsstandes zur ProInformatik und eines Programmierwettbewerbs bei der Langen Nacht der Wissenschaften 2016
+\item Hochschuldidaktisches Zertifikat der Freien Universität (07/2016)
+\end{itemize}
+
+\section{Zukünftige Vorhaben}
+
+Seit September 2016 unterrichte ich als Quereinsteiger in den Fächern Informatik und Mathematik am Gymnasium Tiergarten. Mit interessierten Schülerinnen habe ich im Februar 2017 eine Exkursion an die Freie Universität durchgeführt und ihnen die Teilnahme an einem Workshop im Rahmen des MINToring Programms ermöglicht. 
+
+Für den Sommer 2018 plane ich eine zweiwöchige Lehrveranstaltung mit dem Arbeitstitel ``ProInformatik 0''. Diese wird das bestehende Kursprogramm der ProInformatik nach unten abrunden und sich an Schülerinnen und Schüler der Klassenstufen 10 und 11 richten. Der Zielgruppe entsprechend ist das fachliche Niveau etwas niedriger als bei den anderen ProInformatik-Kursen, und eine Anrechnung des Kurses auf ein universitäres Studium nicht möglich. Inhaltlich bietet der Kurs in Anlehnung an die Vorlesung ``The Beauty and Joy of Computing'' der University of California (Berkeley) eine Einführung in die Programmierung anhand von Snap.
+
+\pagebreak
+
+\section{Lehrveranstaltungen an der Freien Universität}
+
+Als Lehrbeauftragter und als wissenschaftlicher Mitarbeiter habe ich folgende Lehrveranstaltungen am Institut für Informatik der Freien Universität Berlin durchgeführt:\\
+
+\begin{tabular}{ l | l }
+  Sommer 2017 & Proseminar: Geschichte des Computers (mit Prof. Rojas)\\
+  \hline
+  Sommer 2016 & Vorlesung ProInformatik III: Objektorientierte Programmierung\\[-2mm]
+  & Proseminar: Programmierspiele\\[-2mm]
+  & E-Learning-Projekt: Peer Review mit Sakai\\
+  \hline  
+Winter 2015/16 & Brückenkurs Informatik und Bioinformatik\\[-2mm]
+& Kurs: E-Learning Plattformen\\[-2mm]
+& Softwarepraktikum: Game Programming mit libGDX\\
+ \hline			
+Sommer 2015 & Vorlesung ProInformatik III: Objektorientierte Programmierung\\[-2mm]
+& Proseminar: Geschichte des Computers (mit Julian Röder, M.A.)\\[-2mm]
+& Kurs: E-Learning-Plattformen\\[-2mm]
+& Softwareprojekt Übersetzerbau\\
+  \hline
+Winter 2014/15 & Brückenkurs Informatik und Bioinformatik\\[-2mm]
+& Kurs: E-Learning Plattformen\\[-2mm]
+& Softwarepraktikum: Android Game Programming\\
+  \hline
+Sommer 2014 & Vorlesung ProInformatik III: Objektorientierte Programmierung\\[-2mm]
+& Softwareprojekt Übersetzerbau: Rail (mit Prof. Fehr)\\
+  \hline
+Winter 2013/14 & Brückenkurs Informatik und Bioinformatik\\[-2mm]
+& Proseminar: Geschichte des Computers (mit Prof. Rojas)\\[-2mm]
+& Softwarepraktikum: Stadtsimulation auf Basis von SimCity\\[-2mm]
+& Übung zur Vorlesung Übersetzerbau\\
+  \hline
+Sommer 2013 & Softwareprojekt Übersetzerbau (mit Prof. Fehr)\\[-2mm]
+& Proseminar Programmierspiele (mit Prof. Rojas)\\
+  \hline
+Winter 2012/13 & Softwarepraktikum: Entwicklung eines Rogue-like Games\\[-2mm]
+& Übung zur Vorlesung Übersetzerbau\\
+  \hline
+Sommer 2008 & Kurs: Automotive Infotainment (mit Prof. Rojas, Fabian Klebert)\\
+\end{tabular}
+
+\end{document}
