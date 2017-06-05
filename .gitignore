@@ -7,7 +7,7 @@ www.zorinaq.com
 *.log
 *.out
 *.run.xml
-*.sunctex.gz
+*.synctex.gz
 
 # other stuff
 .DS_Store 
