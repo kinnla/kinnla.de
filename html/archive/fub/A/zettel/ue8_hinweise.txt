@@ -1,0 +1,78 @@
+Hinweise zum 8. Übungsblatt
+
+-------------------------------- 1. Aufgabe --------------------------------
+
+"zweizeilig" soll heißen: exclusive Signaturzeile, also für das Programm sind 
+nur eine Zeile Signatur und höchstens zwei "logische" Zeilen Code erlaubt. 
+Alle Programme sind übrigens auch als Einzeiler lösbar.
+
+Sinn der Zeilenbeschränkung ist es, nichtrekursive Lösungen nahezulegen. 
+Hierzu sind Listenfunktionen aus dem Prelude nützlich. Hier alle Funktionen,
+die ich gebrauchen konnte (als Nachschlagetipp, falls ihr nicht weiterkommt):
+
+all, filter, not, elem, sum, map, zipWith, flip, null, head, tail, sqrt, snd,
+uncurry, zip, scanl1, max, (.), (^), (-), (||), (==), (/=), (+), (:). 
+
+Etwas kniffelig ist d), daher folgende Punkteverteilung: a=1, b=1, c=2, d=3
+
+in c) kann man von einer Liste von Int ausgehen, also von der Signatur 
+[Int] -> Bool.
+
+Beispiel für d): Aufruf mit [2,-1,4,3,1,4,5,3] ergibt [2,4,5]
+
+Man kann ohne "error" auskommen, indem man fehlerhafte Eingaben ignoriert.
+Leere Listen beachten!
+
+-------------------------------- 2. Aufgabe --------------------------------
+
+a) ist fast geschenkt -- geht in einer Zeile. Die Tabelle soll eine Liste von 
+Tupeln sein. Keine Stringausgabe nötig!
+
+Für b) kann man sich wie in der Restaurantrechnungaufgabe Teillösungen überlegen.
+Zunächst einmal muss man aus einem Intervall "(x2,x2)" und einem Abstand "sw"
+eine Liste von Werten errechnen, im Beispiel [0.6, 0.8, .. 5.0]. Darauf wendet 
+man die Funktion aus Aufgabenteil a) an. 
+
+Für die Ausgabe ist etwas mehr zu tüfteln -- bitte aber auf jeden Fall die 
+vorgeschlagene 90-Grad Drehung verwenden! Am linken und unteren Rand soll
+wie im Beispiel eine Skala ausgegeben werden (die untere ist wieder ein
+Teilproblem für sich). Als Spaltenbreite bitte die Breite einer Durchschnittskonsole
+verwenden. Achtung: Float-Zahlen haben als Strings unterschiedliche Längen.
+Werte, die aus dem Wertebereich herausragen (zB die Funktion (^2) bei ansonsten 
+gleicher Beispieleingabe) sollen keinen Fehler ergeben, sondern einfach nicht 
+gezeichnet werden.
+
+Fehlerhafte Eingaben abfangen!
+
+-------------------------------- 3. Aufgabe --------------------------------
+
+ist recht einfach, sobald man die Aufgabenstellung kapiert habt. Die Definition
+von Quicksort findet ihr in eurer Vorlesungsmitschrift. Nun braucht man noch 
+als Anpassungen vornehmen, dass der Typ polymorph ist und die Vergleichsfunktion
+(Funktion, nicht Operator) übergeben wird. Wenn man die Signatur gefunden hat, 
+hat man eigentlich auch die Lösung.
+
+-------------------------------- 4. Aufgabe --------------------------------
+
+Die ')' hinter dem Epsilon zu viel. Geht in einer Zeile. Hier ebenfalls:
+überlegt euch zuerst die Signatur. Verwendet Double, nicht Float.
+
+-------------------------------- 5. Aufgabe --------------------------------
+
+Wieder ist ein cleverer Entwurf gefragt. Nur so viel: Man kann Aufgabe 3 
+(mit lexikographischer Ordnung) verwenden. Drei interessante Funktionen
+aus dem Prelude:
+
+words, isAlphaNum, toLower
+
+Grosskleinschreibung könnt ihr ignorieren, ebensowenig kommt es darauf an, 
+welche Sonderzeichen man herausfiltert. Man kann auch alles herausfiltern,
+was kein Buchstabe ist.
+
+Leere Liste beachten!
+
+----------------------------------------------------------------------------
+ 
+noch Fragen? mailto: zoppke@inf.fu-berlin.de
+
+viel Vergnügen, und Erfolg!

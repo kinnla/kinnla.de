@@ -1,0 +1,197 @@
+% Vier Lösungen zu Aufgabe 29 b)
+\documentclass{article}
+\usepackage{ngerman}
+\usepackage{isolatin1}
+
+\textwidth=16,1cm
+\textheight=25cm
+\hoffset = -17mm
+\voffset = -30mm
+
+\begin{document}
+
+\begin{centering}
+{\large \bf Algorithmen und Programmierung 3, WS 2003/2004 --- Aufgabe 29 b)\par}
+\bigskip
+Vier Varianten, den Beweis zu führen 
+{\small \it \qquad(zusammengefasst von Till Zoppke)}
+\par \medskip
+\end{centering}
+
+\hrule
+\medskip
+\noindent
+In einem vollen binären Baum hat jeder innere Knoten zwei
+Kinder. Beweisen Sie, dass in einem vollen binären Baum mit $n$ Blättern auf
+Tiefe $l_1,\ldots,l_n$ die folgende Gleichung gilt:
+$$\sum_{i=1}^n 2^{-l_i}=1$$
+\begin{enumerate}
+\setcounter{enumi}{-1}
+
+\item
+\underline{Gebrauchsanweisung}
+\begin{enumerate}
+\item
+Drucken Sie die Datei auf Papier.
+\item
+Nehmen Sie sich die Beweise nacheinander vor. Skizzieren Sie dabei 
+am Seitenrand, wie der Baum aussieht, welche Knoten entfernt werden und
+welche Höhe sie haben. Solche Zeichnungen fehlen im Druck, sind aber
+essentiell zum Verständnis.
+
+\end{enumerate}
+
+\item
+\underline{Beweis per vollständiger Induktion über die Anzahl der Blätter}
+\\[2mm]
+{\bf I.A.} $n$=1: Ein Baum mit einem Blatt besteht nur aus der Wurzel,
+welche Tiefe 0 hat. Damit gilt $\sum_{i=1}^n 2^{-l_i}=2^0=1$.
+\\[3mm]
+{\bf I.V.} Für einen Baum mit $n$ Blättern gelte $\sum_{i=1}^n 2^{-l_i}=1$.
+\\[3mm]
+{\bf I.S.} $n\mapsto n+1$: oBdA seien die Knoten mit Index $n$ und $n+1$ 
+Geschwister.
+Geschwisterknoten haben die gleiche Tiefe. Deshalb können wir die Summe wie
+folgt umformen:
+$$
+\sum_{i=1}^{n+1} 2^{-l_i}
+=\sum_{i=1}^{n-1} 2^{-l_i} + 2^{-l_n} + 2^{-l_{n+1}}
+=\sum_{i=1}^{n-1} 2^{-l_i} + 2 \cdot 2^{-l_n}
+=\sum_{i=1}^{n-1} 2^{-l_i} + 2^{-(l_n-1)}
+$$
+Wir entfernen nun die Knoten mit Index $n$ und $n+1$ aus dem Baum. 
+Damit wird ihr 
+Elternknoten zu einem Blatt mit Tiefe $l_n-1$. Dies entspricht der 
+vorgenommenen rechnerischen Umformung. Wir setzen nun 
+$l'_i:=l_i$ (für $i<n$) und $l'_n:=l_n$. Mit dieser Umbenennung 
+erhalten wir eine Formel für den um zwei Knoten verringerten Baum. Dieser
+ist ein voller Baum mit $n$ Blättern, also können wir die 
+Induktionsvoraussetzung anwenden:
+$$=\sum_{i=1}^n 2^{-l'_i}=1 \qquad q.e.d.$$
+
+\item
+\underline{Beweis per vollständiger Induktion über die Höhe des Baumes}
+\\[2mm]
+{\bf I.A.} $h$=0: Ein Baum mit Höhe 0 besteht nur aus der Wurzel, welche
+Tiefe 0 hat. Damit gilt $\sum_{i=1}^n 2^{-l_i}=2^0=1$.
+\\[3mm]
+{\bf I.V.} Für alle Bäume mit Höhe $\le h$ gelte 
+$\sum_{i=1}^n 2^{-l_i}=1$.
+\\[3mm]
+{\bf I.S.} $h\mapsto h+1$: Wir spalten die Summe entsprechend den beiden
+Teilbäumen der Wurzel auf. Die Indizes der Blätter des linken Teilbaumes seien
+$1,\ldots,k$, und $k+1,\ldots,n$ die Indizes der Blätter des rechten 
+Teilbaums. Nun formen wir folgendermaßen um:
+$$
+\sum_{i=1}^{n} 2^{-l_i}
+=\sum_{i=1}^{k} 2^{-l_i}+\sum_{i=k+1}^{n} 2^{-l_i}
+=\sum_{i=1}^{k} \frac{1}{2}\cdot 2^{-(l_i-1)}
+  +\sum_{i=k+1}^{n} \frac{1}{2}\cdot 2^{-(l_i-1)}
+=\frac{1}{2}\cdot\left(\sum_{i=1}^{k} 2^{-(l_i-1)} 
+  +\sum_{i=k+1}^{n}2^{-(l_i-1)}\right)
+$$
+Wir spalten den Baum in zwei Teilbäume auf, indem wir die Wurzel entfernen.
+Die Tiefe jeden Knotens verringert sich um 1. Dies
+entspricht der vorgenommenen rechnerischen Umformung. Wir setzen nun
+$l'_i:=l_i-1$  (für $i\le k$) 
+und $l''_i:=l_{i+k}-1$ (für $i\le m$ mit $m:=n-k$).
+und beschreiben die beiden neuen Bäume. Da sich die Tiefe jeden
+Knotens verringert hat, hat der eine Baum nun Höhe $h$ und der andere eine
+Höhe $\le h$. Also können wir die Induktionsvoraussetzung anwenden:
+$$
+=\frac{1}{2}\cdot\left(\sum_{i=1}^{k} 2^{-l'_i} 
+  +\sum_{i=1}^{m}2^{-l''_i}\right)
+=\frac{1}{2}\cdot(1+1)
+=1
+\qquad q.e.d.$$
+\pagebreak
+
+\item
+\underline{Beweis per vollständiger Induktion über die Tiefe der Knoten}
+\\[2mm]
+Wir beweisen zunächst folgende Eigenschaft für volle binäre Bäume.
+\\[2mm]
+\underline{Satz}: 
+Sei $T$ ein beliebiger voller binärer Baum mit Höhe $h$. Dann gilt für jeden 
+Knoten $v \in T$:
+$$\sum_{w \in B(v)} 2^{-l(w)}= 2^{-l(v)}$$
+(mit $B(v)$ als Menge aller Blattknoten des Teilbaumes, 
+dessen Wurzel $v$ ist, und $l(v)$ als der Tiefe eines Knotens $v$).
+\\[3mm]
+\underline{Beweis}:
+\\
+{\bf I.A.} $l(v)=h$: Jeder Knoten mit Tiefe $h$ ist ein Blatt. Ein Blatt ist
+das einzige Blatt in dem Teilbaum, dessen Wurzel es ist. Also gilt 
+$B(v)=\{v\}$ und damit trivial 
+$\sum_{w \in B(v)} 2^{-l(w)} = 2^{-l(v)}$.
+\\[2mm]
+{\bf I.V.} Für alle Knoten $v$ auf Tiefe $l(v)=t$ gelte 
+$\sum_{w \in N(v)} 2^{-l(w)}= 2^{-l(v)}$.
+\\[2mm]
+{\bf I.S.} $t \mapsto t-1$: Sei $v$ ein Knoten auf Tiefe $l(v)=t-1$.
+Falls $v$ ein Blatt ist, ist die zu zeigende Eigenschaft trivial (vgl. I.A.).
+Falls $v$ ein innerer Knoten ist, 
+so verteilen sich die Blätter im Teilbaum von $v$ auf die Kinder $k,k'$:
+$B(v)=B(k) \cup B(k')$ und damit:
+$$\sum_{w \in B(v)} 2^{-l(w)} 
+= \sum_{w \in B(k)} 2^{-l(w)} + \sum_{w \in B(k')} 2^{-l(w)}
+$$
+ Die Knoten $k$ und $k'$ haben Tiefe 
+$l(k)=l(k')=t$, weshalb wir nun die Induktionsvoraussetzung anwenden können:
+$$= 2^{-l(k)} + 2^{-l(k')} = 2^{-t}+2^{-t}=2 \cdot 2^{-t} = 2^{-(t-1)}
+=2^{-l(v)}\qquad q.e.d.$$
+Aus der soeben gezeigten Eigenschaft ergibt sich die zu zeigende, indem wir
+für $v$ die Wurzel des Teilbaums einsetzen. Dann ist $B(v)$ die Menge aller
+Blätter des Baumes und es gilt:
+$$\sum_{i=1}^{n} 2^{-l_i} = \sum_{w \in B(v)} 2^{-l(w)} = 2^{-l(v)} = 2^0 = 1
+\qquad q.e.d.$$
+
+\item
+\underline{Beweis durch Analogie zum Entscheidungsbaum (nach Günter Rote)}
+\\
+In diesem Beweis nutzen wir Erkenntnisse aus der Stochastik. Wir sammeln
+zunächst einmal relevante Eigenschaften von Entscheidungsbäumen. 
+\begin{itemize}
+\item 
+Ein Zufallsexperiment besteht aus einer Folge von Ereignissen. Die Gesamtheit
+aller möglichen Ereignisfolgen lässt sich in einem Entscheidungsbaum 
+darstellen. 
+\item
+Jedes Ereignis markiert einen Knoten, der die möglichen
+Folgeereignisse als Kinder hat. Als Wurzel setzt man einen Knoten, welcher
+den Zustand vor dem ersten Ereigins darstellt, mit allen möglichen ersten 
+Ereignissen als Kindern. Die Blätter stehen für jene Ereignisse, an denen
+eine bestimmte Abbruchbedingung eintritt, und das Experiment zuende ist.
+\item
+Die Kanten werden mit Zahlenwerten belegt. Der Wert $p$ auf einer Kante
+vom Knoten $v$ zu einem Kind $w$ gibt die Wahrscheinlichkeit an,
+mit der das Ereignis $w$ stattfindet (unter der Voraussetzung, dass
+die Ereignisfolge, die zu $v$ führte, bereits stattgefunden hat).
+\item
+Die Summe aller von einem Knoten ausgehenden Wahrscheinlichkeiten ist 1.
+\item
+Die Wahrscheinlichkeit, dass eine Folge von Ereignissen eintritt, ist 
+das Produkt der Wahrscheinlichkeiten des Weges, der der Ereignissfolge
+im Baum entspricht.
+\item
+Die Summe der Wahrscheinlichkeiten aller Wege von der Wurzel zu den Blättern
+ist 1.
+\end{itemize}
+Nun betrachten wir einen beliebigen vollen binären Baum. Diesen Baum können
+wir als einen Entscheidungsbaum interpretieren, bei dem es zu jedem Ereignis
+zwei mögliche Folgeereignisse gibt (es sei denn, eine Abbruchbedingung
+greift, wodurch sich ein Blatt ergibt). Wir belegen jede Kante mit der 
+Wahrscheinlichkeit $\frac{1}{2}$.
+Dann ist die Wahrscheinlichkeit für den Weg zum Blatt $v$ auf Tiefe $l$ gleich
+$2^{-l}$, da genau $l$ Kanten mit Wahrscheinlichkeit $\frac{1}{2}$ passiert 
+werden. Summiert man dies über alle Blätter, so erhält man die gesuchte 
+Formel $\sum_{i=1}^n 2^{-l_i}$, welche sich gemäß obiger Überlegungen zu 1 
+auswertet.$\qquad q.e.d.$
+\\[3mm]
+Beispiel: Wirf eine Münze, bis einmal Kopf gefallen ist, aber wiederhole
+maximal drei mal.
+
+\end{enumerate}
+
+\end{document}
+

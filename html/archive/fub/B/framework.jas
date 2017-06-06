@@ -1,0 +1,672 @@
+// Testprogramm für RO, Übungsblatt 2
+// (c) till zoppke
+
+.constant
+OBJREF 0x40			// needed for method invokation - see S.C.O. chapter 4
+.end-constant
+
+// main method.
+// uncomment function calls, if you don't want to test them
+.main
+
+start:	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testPOPTWO	// test POPTWO
+
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testIMULT		// test IMULT
+
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testISHR		// test ISHR
+
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL done		// done!
+
+	HALT				// end of program
+
+.end-main
+
+//*******************************************************************************/
+//******************************** t e s t i n g ********************************/
+//*******************************************************************************/
+
+//////////////////////////// testPOPTWO() //////////////////////////////////////
+
+.method testPOPTWO()
+
+	LDC_W OBJREF			// print "POPTWO testing...\n"
+	INVOKEVIRTUAL poptwotesting
+
+tP1:	BIPUSH 0xDD	// 1st test
+	BIPUSH 0xFF
+	BIPUSH 0xFF
+	BIPUSH 0xFE
+	BIPUSH 0xEF
+
+	POPTWO
+	IF_ICMPEQ tP1a
+	GOTO tP1b
+
+tP1a:	LDC_W OBJREF			// print "ok.\n"
+	INVOKEVIRTUAL ok
+	GOTO tP2
+
+tP1b:	LDC_W OBJREF			// print "error!\n"
+	INVOKEVIRTUAL error
+	GOTO tP2
+
+tP2:	BIPUSH 0x22	// 2nd test
+	BIPUSH 0x22
+	BIPUSH 0x23
+	BIPUSH 0x24
+	BIPUSH 0x25
+	POPTWO
+	BIPUSH 0x26
+	POPTWO
+	IF_ICMPEQ tP2a 	// if correct result, go on
+	GOTO tP2b	// else display error
+
+tP2a:	LDC_W OBJREF			// print "ok.\n and return to main"
+	INVOKEVIRTUAL ok
+	IRETURN
+
+tP2b:	LDC_W OBJREF			// print "error!\n and return to main"
+	INVOKEVIRTUAL error
+	IRETURN
+
+.end-method
+
+//////////////////////////////////// testIMULT() /////////////////////////////
+
+.method testIMULT()
+
+	LDC_W OBJREF			// print "IMULT testing...\n"
+	INVOKEVIRTUAL imulttesting
+
+	BIPUSH '1'		// 1 * 1 = 1
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '1'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x01
+	BIPUSH 0x01
+	BIPUSH 0x01
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '1'		// 1 * 7 = 7
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '7'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x01
+	BIPUSH 0x07
+	BIPUSH 0x07
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '7'		// 7 * 1 = 7
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '1'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x07
+	BIPUSH 0x01
+	BIPUSH 0x07
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '0'		// 0 * 0 = 0
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '0'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x00
+	BIPUSH 0x00
+	BIPUSH 0x00
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '0'		// 0 * 1 = 0
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '1'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x00
+	BIPUSH 0x01
+	BIPUSH 0x00
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '1'		// 1 * 0 = 0
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '0'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x01
+	BIPUSH 0x00
+	BIPUSH 0x00
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '2'		// 2 * 3 = 6
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '3'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x02
+	BIPUSH 0x03
+	BIPUSH 0x06
+	INVOKEVIRTUAL computeMult
+
+	BIPUSH '4'		// 40 * 7 = 1C0
+	OUT
+	BIPUSH '0'
+	OUT
+	BIPUSH '*'
+	OUT
+	BIPUSH '7'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x40
+	BIPUSH 0x7
+	BIPUSH 0x38		// 38
+	DUP
+	IADD			// 70
+	DUP
+	IADD			// E0
+	DUP
+	IADD			// 1C0
+	INVOKEVIRTUAL computeMult
+
+	IRETURN
+
+.end-method
+
+////////////////////////////// method testISHR /////////////////////////////
+
+.method testISHR()
+
+	LDC_W OBJREF			// print "ISHR testing...\n"
+	INVOKEVIRTUAL ishrtesting
+
+	BIPUSH '8'			// 8 >> 3 = 1
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '3'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x08
+	BIPUSH 0x03
+	BIPUSH 0x01
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH '0'			// 0 >> 0 = 0
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '0'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x00
+	BIPUSH 0x00
+	BIPUSH 0x00
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH '8'			// 8 >> 0 = 8
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '0'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x08
+	BIPUSH 0x00
+	BIPUSH 0x08
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH '8'			// 8 >> 8 = 0
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '8'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x08
+	BIPUSH 0x08
+	BIPUSH 0x00
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH 'F'			// FF >> F = FFFFFFFF
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH 'F'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0xFF
+	BIPUSH 0x0F
+	BIPUSH 0xFF
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH 'F'			// FF >> FF = FFFFFFFF
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH 'F'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0xFF
+	BIPUSH 0xFF
+	BIPUSH 0xFF
+	INVOKEVIRTUAL computeISHR
+
+	BIPUSH 'F'			// FFFFF000 >> 9 = FFFFFFF8
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH 'F'
+	OUT
+	BIPUSH '0'
+	OUT
+	BIPUSH '0'
+	OUT
+	BIPUSH '0'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '>'
+	OUT
+	BIPUSH '9'
+	OUT
+	LDC_W OBJREF
+	BIPUSH 0x80			// FFFFFF80
+	DUP
+	IADD				// FFFFFF00
+	DUP
+	IADD				// FFFFFE00
+	DUP
+	IADD				// FFFFFC00
+	DUP
+	IADD				// FFFFF800
+	DUP
+	IADD				// FFFFF000
+	BIPUSH 0x09
+	BIPUSH 0xF8
+	INVOKEVIRTUAL computeISHR
+
+	IRETURN
+
+.end-method
+
+
+//*******************************************************************************/
+//****************************** c o m p u t i n g ******************************/
+//*******************************************************************************/
+
+/////////////////////////////// computeMult() //////////////////////////////
+
+.method computeMult(a, b, correct_result)
+
+.var
+	computed_result
+.end-var
+
+	ILOAD a			// perform multiplication
+	ILOAD b
+	IMULT
+	ISTORE computed_result
+
+	BIPUSH '='		// print "="
+	OUT
+
+	LDC_W OBJREF		// output result
+	ILOAD computed_result
+	INVOKEVIRTUAL printNumber
+
+	ILOAD computed_result	// check, whether result is correct
+	ILOAD correct_result
+	IF_ICMPEQ coMu1
+
+	LDC_W OBJREF		// output "error!" and return
+	INVOKEVIRTUAL error
+	IRETURN
+
+coMu1:	LDC_W OBJREF		// output "ok." and return
+	INVOKEVIRTUAL ok
+	IRETURN
+
+.end-method
+
+
+/////////////////////////////// computeISHR() //////////////////////////////
+
+.method computeISHR(a, b, correct_result)
+
+.var
+	computed_result
+.end-var
+
+	ILOAD a			// perform shifting
+	ILOAD b
+	ISHR
+	ISTORE computed_result
+
+	BIPUSH '='		// print "="
+	OUT
+
+	LDC_W OBJREF		// output result
+	ILOAD computed_result
+	INVOKEVIRTUAL printNumber
+
+	ILOAD computed_result	// check, whether result is correct
+	ILOAD correct_result
+	IF_ICMPEQ coSH1
+
+	LDC_W OBJREF		// output "error!" and return
+	INVOKEVIRTUAL error
+	IRETURN
+
+coSH1:	LDC_W OBJREF		// output "ok." and return
+	INVOKEVIRTUAL ok
+	IRETURN
+
+.end-method
+
+
+//*******************************************************************************/
+//******************************** p r i n t i n g ******************************/
+//*******************************************************************************/
+
+///////////////////////////// method printNumber //////////////////////////////
+
+.method printNumber( total ) 	// print converts a number into a string of
+				//   characters and prints them.  All of the characters
+				//   are pushed onto the stack, least significant
+				//   digit first, then popped off and printed.
+.var
+place
+index
+.end-var
+
+print: 	BIPUSH 0x9		// there are 8 nibbles in each integer--setting
+				//   this as nine pushes 10 characters onto the
+ 				//   stack, thus a total of ten printed digits,
+				//   but setting this less does not remove the
+				//   two leading zeros, just removes significant
+				//   digits
+	ISTORE index
+	BIPUSH 0x1		// comparison bit
+	ISTORE place
+print1:	BIPUSH 0x0
+	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ pall		// if index = 0  goto pall
+	ISTORE index
+	ILOAD total		// else
+	ILOAD place		//
+	IAND			//   if 1st bit of current nibble is zero (total & place)
+	IFEQ print2		//     goto print2
+	BIPUSH 0x1		//   else set first bit of character
+	IADD
+print2: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 2nd bit of current nibble is zero (total & place)
+	IFEQ print3		//     goto print3
+	BIPUSH 0x2		//   else set second bit of character
+	IADD
+print3: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 3rd bit of current nibble is zero (total & place)
+	IFEQ print4		//     goto print4
+	BIPUSH 0x4		//   else set second bit of character
+	IADD
+print4: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 4th bit of current nibble is zero (total & place)
+	IFEQ print5		//     goto print5
+	BIPUSH 0x8		//   else set second bit of character
+	IADD
+print5: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	GOTO print1
+
+pall:   POP			// Pop off leading 0's
+	POP
+	BIPUSH 0x9
+	ISTORE index
+pall1:	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ return		// if index = 0  return
+	ISTORE index
+	DUP
+	BIPUSH 0xa		// else if character < 0xa goto pall1
+	ISUB
+	IFLT pall2
+	BIPUSH 0x37		// else convert character to "A"-"F"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall (prepare & print next character)
+pall2:	BIPUSH 0x30		// convert character to "0"-"9"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall1 (prepare & print next character)
+return:	IRETURN			// no return value
+.end-method
+
+//////////////////////////////// error() //////////////////////////////////////
+
+.method error()		// prints "error!\n"
+	BIPUSH 0x20
+	OUT
+	BIPUSH 'e'
+	OUT
+	BIPUSH 'r'
+	OUT
+	BIPUSH 'r'
+	OUT
+	BIPUSH 'o'
+	OUT
+	BIPUSH 'r'
+	OUT
+	BIPUSH '!'
+	OUT
+	BIPUSH 0xa	// print carriage return
+	OUT
+	IRETURN
+.end-method
+
+//////////////////////////////// testing() //////////////////////////////////////
+
+.method testing()		// prints "testing...\n"
+	BIPUSH 0x20
+	OUT
+	BIPUSH 't'
+	OUT
+	BIPUSH 'e'
+	OUT
+	BIPUSH 's'
+	OUT
+	BIPUSH 't'
+	OUT
+	BIPUSH 'i'
+	OUT
+	BIPUSH 'n'
+	OUT
+	BIPUSH 'g'
+	OUT
+	BIPUSH '.'
+	OUT
+	BIPUSH '.'
+	OUT
+	BIPUSH '.'
+	OUT
+	BIPUSH 0xa	// print carriage return
+	OUT
+	IRETURN
+.end-method
+
+/////////////////////////////// ok() //////////////////////////////
+
+.method ok()		// prints "ok.\n"
+	BIPUSH 0x20
+	OUT
+	BIPUSH 'o'
+	OUT
+	BIPUSH 'k'
+	OUT
+	BIPUSH '.'
+	OUT
+	BIPUSH 0xa	// print carriage return
+	OUT
+	IRETURN
+.end-method
+
+/////////////////////////////// done() //////////////////////////////
+
+.method done()		// prints "done!\n"
+	BIPUSH 0x20
+	OUT
+	BIPUSH 'd'
+	OUT
+	BIPUSH 'o'
+	OUT
+	BIPUSH 'n'
+	OUT
+	BIPUSH 'e'
+	OUT
+	BIPUSH '!'
+	OUT
+	BIPUSH 0xa	// print carriage return
+	OUT
+	IRETURN
+.end-method
+
+/////////////////////////////// poptwotesting() //////////////////////////////
+
+.method poptwotesting()		// prints "POPTWO testing...\n"
+	BIPUSH 'P'
+	OUT
+	BIPUSH 'O'
+	OUT
+	BIPUSH 'P'
+	OUT
+	BIPUSH 'T'
+	OUT
+	BIPUSH 'W'
+	OUT
+	BIPUSH 'O'
+	OUT
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testing		// done!
+	IRETURN
+.end-method
+
+/////////////////////////////// imulttesting() //////////////////////////////
+
+.method imulttesting()		// prints "IMULT testing...\n"
+	BIPUSH 'I'
+	OUT
+	BIPUSH 'M'
+	OUT
+	BIPUSH 'U'
+	OUT
+	BIPUSH 'L'
+	OUT
+	BIPUSH 'T'
+	OUT
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testing
+	IRETURN
+.end-method
+
+
+/////////////////////////////// imulttesting() //////////////////////////////
+
+.method ishrtesting()		// prints "ISHR testing...\n"
+	BIPUSH 'I'
+	OUT
+	BIPUSH 'S'
+	OUT
+	BIPUSH 'H'
+	OUT
+	BIPUSH 'R'
+	OUT
+	LDC_W OBJREF			// prepare for method call
+	INVOKEVIRTUAL testing
+	IRETURN
+.end-method
+
+////////////////////// Testlauf ////////////////////
+//
+// POPTWO testing...
+//  ok.
+//  ok.
+// IMULT testing...
+// 1*1=00000001 ok.
+// 1*7=00000007 ok.
+// 7*1=00000007 ok.
+// 0*0=00000000 ok.
+// 0*1=00000000 ok.
+// 1*0=00000000 ok.
+// 2*3=00000006 ok.
+// 40*7=000001C0 ok.
+// ISHR testing...
+// 8>>3=00000001 ok.
+// 0>>0=00000000 ok.
+// 8>>0=00000008 ok.
+// 8>>8=00000000 ok.
+// FF>>F=FFFFFFFF ok.
+// FF>>FF=FFFFFFFF ok.
+// FFFFF000>>9=FFFFFFF8 ok.
+//  done!
+//
+// End of run.

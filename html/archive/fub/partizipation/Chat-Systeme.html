@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Chat-Systeme</title>
+</head>
+<body>
+<big><big>Unser Muster zur Implementierung des Chat-Systemes</big></big><br>
+<br>
+Ein Multiuser-Chat ist prinzipiell ein Client-Server-System. Der Server
+gew&auml;hrleistet die Versorgung der einzelnen Klienten mit Daten und
+damit deren Synchronizit&auml;t. Der Klient muss sich beim Server
+anmelden und bekommt eine Identit&auml;t zugewiesen.<br>
+<br>
+F&uuml;r einen Chat, der ohne weitere Installation &uuml;ber einen
+Browser betrieben werden kann, gibt es drei Varianten technischer
+Realisierbarkeit: ActiveX, dhtml und Java. ActiveX scheidet aus, da
+propriet&auml;r und nur im MS-IE lauff&auml;hig.<br>
+<br>
+Der Vorteil einer auf html und Javascript basierenden L&ouml;sung ist
+eine einfache Implementierung. Trotz immer noch bestehender
+unterschiedlicher Unterst&uuml;tzung der verschiedenen javascript- und
+html-Standards werden diese Technologien inzwischen von allen
+g&auml;ngigen Browsern &auml;hnlich gehandhabt. Entsprechend sind nur
+geringe Kompatibilit&auml;tsprobleme zu erwarten. Ein Nachteil besteht
+darin, dass nur ein browserseitiger <span style="font-style: italic;">pull</span>(in
+der Regel ein refresh pro 3 Sekunden) f&uuml;r den Informationsfluss
+vom Server zum Klienten in Frage kommt, was unn&ouml;tigen Traffic bzw.
+eine Verz&ouml;gerung des Informationsflusses zur Folge hat. Eine
+beispielhafte Implementierung dieser Technik findet sich unter
+http://www.shanecooper.com/live.cgi.<br>
+<br>
+Java hingegen erm&ouml;glicht auch eine serverseitige Initiierung des
+Informationsabgleichs mit dem Klienten. Java-Chats wirken eleganter als
+javascript-basierte Varianten. Der Klient kann weitere
+Funktionalit&auml;ten erhalten, die &uuml;ber die rudiment&auml;re
+Eingabe und Ausgabe hinausreichen. Allerdings ist Java den mit Windows
+XP ausgelieferten Versionen des IE nicht beigef&uuml;gt. Es muss vom
+Nutzer das plugin heruntergeladen werden. Dar&uuml;berhinaus gibt es
+drei relevante VMs in Browsern: Die mit Netscape 4.x ausgelieferte VM
+von Symantec, die MS-VM und das Java-Plugin von Sun. Letzteres ist die
+einzige, welches fortentwickelt wird, die beiden ersteren
+unterst&uuml;tzen maximal die Funktionen des JDK 1.1.8. Daraus und aus
+den verschiedenen Versionen des Sun-Plugins ergeben sich
+Kompatibilit&auml;tsprobleme. Der umfangreicheren Funktionalit&auml;t
+wegen und zwecks technologischer Herausforderung haben wir uns dennoch
+f&uuml;r Java entschieden.<br>
+<br>
+F&uuml;r die Kommunikation zwischen Server und Klienten gibt es zwei
+m&ouml;gliche L&ouml;sungsans&auml;tze, Sockets und RMI.<br>
+<br>
+Sockets sind sch&ouml;n. Zwischen Server und Klienten werden input-
+bzw. output-streams initiiert. Was die eine Seite schreibt, kann die
+andere lesen. Diese Technik hat den Vorteil, einfach zu sein und auch
+einfach nachvollziehbar. <br>
+<br>
+Hingegen ist RMI eine Abstraktionsebene h&ouml;her angesiedelt. Nach
+einer komplizierten Initialisierung verhalten sich Klient und Server
+logisch gesehen so, als liefen sie auf einer VM. Man muss sich wenig
+Gedanken &uuml;ber das Protokoll machen, da die eine Seite einfach eine
+Methode der anderen aufruft, und die tats&auml;chlich gesendeten bytes
+(dank der eingebauten Serialisierbarkeit von java-Objekten) durch RMI
+besorgt werden. <br>
+<br>
+Dennoch haben wir uns f&uuml;r Sockets entschieden. Zum einen ist RMI
+in Java 1.1 nur mit prototypischem Befehlsumfang enthalten, so dass wir
+zwischen der Unterst&uuml;tzung mehrer VMs und einem
+eingeschr&auml;nktem Befehlsumfang zu entscheiden h&auml;tten. Zum
+anderen sind Sockets weitaus einfacher zu implementieren, insbesondere
+zu debuggen. Die Verwendung dieser Technik gehorcht somit dem
+Programmiergrundsatz &#8222;keep it simple&#8220;. Dar&uuml;ber hinaus lag uns
+bereits ein Socket-Prototyp vor, auf dem wir aufbauen konnten. Sockets
+bieten einfach mehr Netzwerk-Feeling.<br>
+<br>
+Die logische Unterteilung unseres Chat-Systems ergibt sich wie folgt:<br>
+&middot;&nbsp;&nbsp; &nbsp;Server als Kommunikationszentrale, ein
+best&auml;ndig als &#8222;Servlet&#8220; laufender Prozess<br>
+&middot;&nbsp;&nbsp; &nbsp;Verschiedene Klienten (telnet,
+Java-Applikation, insbesondere aber ein Applet)<br>
+&middot;&nbsp;&nbsp; &nbsp;UserManagement als &#8222;Intelligenz&#8220; des Servers
+zur Umsetzung des Schweifmodells.<br>
+&middot;&nbsp;&nbsp; &nbsp;Protokoll f&uuml;r die kommunikation
+zwischen Server und Klient (in unserer Implementierung nicht explizit
+gekapselt)<br>
+&middot;&nbsp;&nbsp; &nbsp;Persistente Datenhaltung und
+Nutzerverwaltung (Stichwort Datenbankanbindung, nicht implementiert)<br>
+<br>
+Bez&uuml;glich der Innenstruktur der einzelnen Module sei auf weitere
+Dokumente verwiesen. (hier, mindestens hier, links einbauen. Viele
+Gr&uuml;&szlig;e, +++ till).<br>
+<br>
+p.s. -- vielleicht koennt ihr noch meine Linkliste zu beispielhaften
+Chat-Systemen gebrauchen. Dokument liegt unter <br>
+http://page.inf.fu-berlin.de/~zoppke/partizipation/JAVA_Chat_Messaging.html<br>
+<br>
+<br>
+</body>
+</html>

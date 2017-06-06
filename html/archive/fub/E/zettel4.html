@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Hinweise zu Aufgabenblatt 4</title>
+</head>
+<body>
+Hinweise zu Aufgabenblatt 4<br>
+<br>
+Aufgabe 23<br>
+<br>
+Zun&auml;chste einmal muss man verstehen, was &uuml;berhaupt zu tun
+ist. Eine Hash-Funktion ordnet einem Objekt eine ganze Zahl zu, wobei
+f&uuml;r je zwei verschiedene Objekte die zugeordneten Zahlen auch
+verschieden sein m&uuml;ssen, die Funktion ist also injektiv. Bei den
+Objekten handelt es sich in dieser Aufgabe um ungeordnete Paare {i, j},
+wobei immer 1&lt;=i&lt;j&lt;=n gelten soll. Die Hash-Funktion wollen
+wir mit Hilfe von Zahlen t<small><small>1</small></small>,...,t<small><small>n</small></small>
+bilden, n&auml;mlich nach der Vorschrift: h({i, j}) = t<small><small>i</small></small>+t<small><small>j</small></small>.
+Um die geforderte Injektivit&auml;t sicherzustellen, m&uuml;ssen alle
+paarweisen Summen&nbsp;t<small><small>i</small></small>+t<small><small>j</small></small>.
+verschieden sein. Das ist die hinreichende und notwendige Bedingung.
+Eine L&ouml;sung f&uuml;r n=3 lautet beispielsweise t<small><small>1</small></small>=1,
+t<small><small>2</small></small>=3, t<small><small>3</small></small>=5.
+Als paarweise Summen regeben sich: 1+3=4, 1+5=6, 3+5=8.<br>
+<br>
+F&uuml;r jedes n gibt es unendlich viele L&ouml;sungen. F&uuml;r eine
+Hash-Funktion ist es jedoch sinnvoll, wenn ihre Funktionswerte
+m&ouml;glichst nah beeinander liegen. Oder genauer: Wenn man das
+Intervall, welches alle Funkionswerte enth&auml;lt, m&ouml;glichst
+klein machen kann. Also ein Optimierungsproblem. In unserem Beispiel
+muss die Differenz zwischen der kleinsten Summe und der
+gr&ouml;&szlig;ten Summe m&ouml;glichst klein sein. Diese Differenz
+lautet im obigen Beispiel 8-4=4. Eine optimale L&ouml;sung f&uuml;r
+n=3&nbsp;lautet beispielsweise t<small><small>1</small></small>=1, t<small><small>2</small></small>=2,
+t<small><small>3</small></small>=3. Als paarweise Summen ergeben sich:
+1+2=3, 1+3=4, 2+3=5, die Differenz liegt bei 5-3=2, die
+Intervalll&auml;nge ist 1 gr&ouml;&szlig;er, also 3.<br>
+<br>
+Wie geht man vor? Das Problem ist &auml;hnlich wie das
+Achtdamenproblem, mit dem Unterschied, dass man &uuml;ber die
+Summen-Intervall&auml;nge optimieren soll. Es l&auml;sst sich auch
+&auml;hnlich programmieren, n&auml;mlich durch backtracking. Man
+f&auml;ngt mit einer leeren L&ouml;sung (L&ouml;sung: Folge t<small><small>1</small></small>,...,t<small><small>n</small></small>)
+an, mit der man die rekursive Funktion aufruft. Diese geht nun alle
+theoretischen M&ouml;glichkeiten durch, eine weitere Zahl
+hinzuzuf&uuml;gen. Falls sich f&uuml;r eine M&ouml;glichkeit ergibt,
+dass zwei Summen gleich sind, lassen wir sie fallen. Falls die Summen
+nicht kollidieren, F&uuml;gen wir die Zahl zur L&ouml;sung hinzu und
+rufen wieder die rekursive Funkion auf. Wenn wir bei einem Aufruf auf
+Tiefe n angekommen sind, haben wir eine L&ouml;sung f&uuml;r n
+gefunden. <br>
+<br>
+Und wie optimiert man? Da gibt es verschiedene M&ouml;glichkeiten. Eine
+ist, dass man zun&auml;chst versucht, eine L&ouml;sung zu finden,
+zwischen deren Summen es keine L&uuml;cken gibt, deren Summen also in
+ein Intervall der theoretisch kleinsten L&auml;nge von n*(n-1)/2 passen
+(Achtung! Druckfehler bei A24b). F&uuml;r n=2, 3 und 4 gibt es solch
+eine L&ouml;sung, f&uuml;r gr&ouml;&szlig;ere n nicht mehr. Man findet
+also beim ersten Durchlauf keine L&ouml;sung, erh&ouml;ht d dann
+Schritt f&uuml;r Schritt, bis man einmal geeignete Zahlen gefunden hat,
+deren Summen in das Intervall der L&auml;nge d passen. Das Problem
+hierbei ist, wie man einen Backtracking-Algorithmus finden kann, der
+irgendwann feststellt, dass alle theoretischen M&ouml;glichkeiten
+f&uuml;r die Zahlen t<small><small>1</small></small>,...,t<small><small>n</small></small>,
+aus denen sich eine L&ouml;sung mit Intervalll&auml;nge d ergeben
+k&ouml;nnte, schon durchprobiert wurden. Hierzu &uuml;berlege man sich,
+wie gro&szlig; bei gegebener Summen-Intervalll&auml;nge d die Differenz
+t<small><small>n</small></small>-t<small><small>1</small></small><small><small> </small></small>maximal
+sein kann. Oder andersrum: Wenn ich n Zahlen habe mit z.B. t<small><small>1</small></small>,=1
+und t<small><small>n</small></small>=100, wie gro&szlig; muss die
+Summen-Intervalll&auml;nge dann mindestens sein? K&ouml;nnte sie
+kleiner als 100 sein? Wovon h&auml;ngt das ab?<br>
+<br>
+Oder man sucht zun&auml;chst L&ouml;sungen beliebiger G&uuml;te, bis
+man sicher sein kann, dass man keine bessere mehr finden kann. Man
+f&auml;ngt z.B. mit Zahlen t<small><small>1</small></small>=1 und t<small><small>n</small></small>=2
+an, und versucht, auf die richtige L&ouml;sung zu kommen, indem man die
+fehlenden n-2 Zahlen dazwischen einordnet. Zwischen 1 und 2 ist
+nat&uuml;rlich nicht genug Platz, also erh&ouml;ht man t<small><small>n</small></small>&nbsp;um
+1 und probiert es wieder. Nun passt die 2 dazwischen, und im Falle n=3
+h&auml;tten wir bereits die L&ouml;sung. Na gut, man erh&ouml;ht weiter
+und weiter. Bis man eine L&ouml;sung findet. Die erste L&ouml;sung (die
+mit dem kleinsten t<small><small>n</small></small>) ist jedoch nicht
+immer die beste. man sucht also weiter. Wann kann man aufh&ouml;ren?
+Daf&uuml;r braucht man eine &auml;hnliche Abbruchbedingung wie oben.
+Der Vorteil an diesem Verfahren ist, dass man auf der Suche nach einer
+L&ouml;sung f&uuml;r n nebenher auch L&ouml;sungen f&uuml;r 2,3, ...
+,n-1 bekommt.<br>
+<br>
+Noch Fragen? Eine Frage w&auml;re z.B., warum man einfach t<small><small>1</small></small>=1
+setzen kann. Verpasst man so nicht m&ouml;gliche L&ouml;sungen? Oder:
+Wieso reicht es nicht aus, eine L&ouml;sung mit m&ouml;glichst
+kleinem&nbsp;t<small><small>n</small></small> zu finden? Ist dann nicht
+logischerweise auch die Summen-Intervall&auml;nge
+kleinstm&ouml;glichst? Warum das nicht der Fall ist, &uuml;berlege man
+sich als weiteren Einstieg in die Problemstellung.<br>
+<br>
+Wenn ihr einen Algorithmus gefunden habt, m&uuml;sst ihr ihn auch
+implementieren. Der zeitkritische Teil des Algorithmus ist der
+rekursive Aufruf. Man hat eine Teill&ouml;sung, der man eine weitere
+Zahl hinzuf&uuml;gen m&ouml;chte. Dazu muss man die sich neu ergebenden
+Summen mit den alten vergleichen. Falls sich keine Kollision ergibt,
+f&uuml;gt man die neuen Summen hinzu. Wenn man in der Rekursion wieder
+zur&uuml;ckspringt, entfernt man sie wieder. F&uuml;r die Summen
+&uuml;berlege man sich eine geeignete Repr&auml;sentation. Am
+einfachsten ist es, alle der Reihe nach in ein int-Array zu schreiben.
+Aber dann ist das Vergleichen sehr teuer, da man das ganze Array
+durchgeht. Das Vergleichen ist g&uuml;nstig, wenn man das Array
+sortiert (vgl. Arrays.sort(), Arrays.binarySearch()) oder z.B. ein
+HashSet verwendet. Aber dann ist das Wegnehmen wieder schwierig. Oder
+man erzeugt vor jedem Rekursionsaufruf eine Kopie des
+Teill&ouml;sungsobjektes, dann braucht man keine Summen zu entfernen,
+man vergisst einfach das Objekt und erinnert sich an das vorige. Oder
+man macht es noch anders. Das Problem ist eine sch&ouml;ne Spielwiese,
+um ein Gef&uuml;hl f&uuml;r Vor- und Nachteile der verschiedenen
+Varianten zu bekommen. Einfach mal ausprobieren. Meine erste
+Implementation hatte ungef&auml;hr 5 Minuten Laufzeit. Nach diversen
+Optimierungen sind es nur noch 7 Sekunden (Prozessor: P4).<br>
+<br>
+Nun zu den Anforderungen. Ich erwarte von euch ein Programm in Java
+oder Haskell, welches<br>
+<ol>
+  <li>sich ohne Parameter starten l&auml;sst (z.B. &raquo;java
+HashZahlen&laquo;),</li>
+  <li>irgendwann fertig wird (sagen wir, nach etwa 5 Minuten),</li>
+  <li>optimale L&ouml;sungen f&uuml;r n=5,6,7,8,9,10 ausgibt,</li>
+  <li>mit einer zutreffenden Abbruchbedingung daf&uuml;r, wann weiteres
+Suchen nicht mehr erfolgreich sein kann (vgl. Beschreibungen der beiden
+Ans&auml;tze)</li>
+  <li>und einer Begr&uuml;ndung der Korrektheit der Abbruchbedingung.</li>
+</ol>
+Die Zahlen allein reichen nicht! Nur f&uuml;r ein Programm gibt es
+Punkte! <br>
+<br>
+Und sonst... <br>
+<ul>
+  <li>Aufgabe 24b: Die L&ouml;sung ist wieder eine Hash-Funktion. Bitte
+mit Nachweis der Injektivit&auml;t</li>
+  <li>Aufgabe 27: Gesucht ist eine Formel zur Bestimmung der t<small><small>1</small></small>,...,t<small><small>n</small></small>:
+Bitte ebenfalls mit Nachweis der Injektivit&auml;t und mit einer
+asymptotischen Analyse der erzielten Summen-Intervalll&auml;ngen.</li>
+  <li>Aufgabe 28: Der modifizierte Quelltext reicht.<br>
+  </li>
+</ul>
+</body>
+</html>

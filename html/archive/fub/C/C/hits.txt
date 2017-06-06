@@ -1,0 +1,12 @@
+Bill Joy 86,700
+Alan Turing 67,400
+Roger Penrose 33,600
+Stefan Meretz 29,700
+Ray Kurzweil 29,300
+Douglas Hofstadter 20,600
+Jaron Lanier 14,400
+Michael Heinrich 5,380
+Nick Bostrom 4,310
+Volker Grassmuck 4,020
+Sabine Nuss 1,490
+Holm Tetens 426

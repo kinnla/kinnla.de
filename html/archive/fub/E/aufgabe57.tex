@@ -1,0 +1,659 @@
+% Eine Lösung zu Aufgabe 57
+\documentclass{article}
+\usepackage{ngerman}
+\usepackage{isolatin1}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{url}
+\usepackage{bbm}
+\usepackage{amssymb}
+
+\textwidth=16,1cm
+\textheight=25cm
+\hoffset = -17mm
+\voffset = -30mm
+
+\begin{document}
+
+\begin{centering}
+{\large \bf Algorithmen und Programmierung 3, WS 2003/2004 --- Aufgabe 57}
+\\[3mm]
+Zwei Spezifikationen, zwei Implementationen, eine Abstraktionsfunktion und anderthalb Beweise
+{\small \it \qquad(zusammengefasst von Till Zoppke)}
+\\[1mm]
+\end{centering}
+
+\hrule
+%%\\[2mm]
+\medskip
+\noindent
+\begin{enumerate}
+\parskip=0,3\parskip
+
+\def\klammerauf{\{\mskip-6,2mu\{}
+\def\klammerzu{\}\mskip-6,2mu\}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Bedienungsanleitung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{enumi}{-1}
+\item
+\underline{Bedienungsanleitung}
+\begin{enumerate}
+\item
+Drucken Sie die Datei auf Papier und lesen Sie den Ausdruck.
+\item
+Was ist eine gültige Darstellung?
+Was ist der Unterschied zwischen einer Invariante und einer Vorbedingung?
+Was ist ein mathematisches Modell?
+Was ist der Unterschied zwischen einer modellierenden und einer algebraischen Spezifikation?
+Was beweist man mit Hilfe der Abstraktionsfunktion?
+\item
+Die Operationen
+\begin{itemize}
+\item sindGleich : MULTI x MULTI $\rightarrow$ BOOL
+\item istLeer: MULTI $\rightarrow$ BOOL
+\end{itemize}
+testen zwei Multimengen auf Gleichheit bzw. eine auf Leerheit.
+Führen Sie für beide Operationen die Schritte (a) -- (d) gemäß der Aufgabenstellung durch.
+\item
+Spezifizieren Sie die Multimenge mit einem anderen Modell, als Menge von Paaren.
+Diese Variante hat den Vorteil, dass sich der Test auf Gleichheit einfacher spezifizieren lässt.
+Wie sieht dann die Abstraktionsfunktion aus?
+\item
+Ändern Sie in der algebraische Spezifikation die Axiome so ab,
+dass Elemente tatsächlich entfernt werden (also dass aus der Kette von Operationen,
+die mit Leer beginnt, die Einfügen-Operation wieder ungeschehen gemacht wird).
+Was bedeutet das für die Implementierung in Haskell?
+
+\item
+Fragen Sie, wenn Sie etwas nicht verstehen.
+\end{enumerate}
+\vspace{2mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Aufgabe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{enumi}{56}
+\item
+Eine \emph{Multimenge} (engl.\ \emph{multiset} oder \emph{bag}) ist etwas "Ahnliches wie eine Menge,
+au"ser dass Elemente auch mehrfach vorkommen d"urfen.
+Die Reihenfolge spielt keine Rolle.
+Zum Beispiel ist $\klammerauf a,b\klammerzu \ne \klammerauf a,a,b\klammerzu
+ = \klammerauf a,b,a\klammerzu \ne \klammerauf a,a,a,b\klammerzu$,
+für $a\ne b$.
+\begin{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (a) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+Schreiben Sie eine Spezifikation f"ur einen abstrakten Datentyp
+von Multimengen "uber der Grundmenge der ganzen Zahlen (\texttt{int}),
+die folgende Operationen unterst"utzt:
+Erzeugen einer leeren Multimenge;
+Einf"ugen und Streichen eines Elementes
+(dabei wird die Vielfachheit jeweils um~1 erh"oht beziehungsweise
+erniedrigt);
+Feststellen der Vielfachheit eines Elementes.
+\\[5mm]
+\underline{Mathematisch Modellierende Spezifikation}
+\\[3mm]
+%%%%%%%%%%%%%% Typen %%%%%%%%%%%%%%%%%%
+\underline{Typen}:
+\\[1mm]
+$\mbox{INT, NAT,}\\
+\mbox{MULTI}=((x_1,a_1),\ldots,(x_n,a_n)),
+\quad \forall _{1\le i\le n}:x_i \in \mathbbm{Z},
+a_i \in \mathbbm{N} \backslash\{0\},
+~~~ n \in \mathbbm{N},
+~~~\forall _{1 \le i < j \le n}:x_i \ne x_j $
+\\[3mm]
+%%%%%%%%%%%%%% Signaturen %%%%%%%%%%%%%%%
+\underline{Signaturen}:
+\\[1mm]
+$\mbox{leer:} \rightarrow \mbox{MULTI} \\
+\mbox{einf"ugen: MULTI} \times \mbox{INT} \rightarrow \mbox{MULTI} \\
+\mbox{entfernen: MULTI} \times \mbox{INT} \rightarrow \mbox{MULTI} \\
+\mbox{wieviel: MULTI} \times \mbox{INT} \rightarrow \mbox{NAT}$
+\\[3mm]
+%%%%%%%%%%%%%%% Definitionen %%%%%%%%%%%%%%
+\underline{Definitionen}:
+\\[1mm]
+$\mbox{leer}()=()$\\
+$\mbox{einf"ugen}(((x_1,a_1), \ldots ,(x_n,a_n)),x)$\\
+\[
+ \hspace{43mm}=\left\{
+ \begin{array}{cc}
+ ((x_1,a_1),\ldots,(x_n,a_n),(x,1))\hspace{15mm} & \mbox{falls\ } \forall_{1\le i \le n}:x_i\ne x\\
+ ((x_1,a_1), \ldots,(x_i,a_i+1),\ldots,(x_n,a_n)) & \mbox{mit }x_i=x\hspace{14mm}
+ \end{array}\right.
+\]
+
+$ \mbox{entfernen}(((x_1,a_1), \ldots ,(x_n,a_n)),x)$\\
+\[
+ \hspace{7mm}=\left\{
+ \begin{array}{cc}
+ \textit{undefiniert}\hspace{64mm}
+ & \mbox{falls }\forall_{1\le i \le n}:x_i \ne x\hspace{4mm}\\
+ ((x_1,a_1), \ldots,(x_i,a_i-1),\ldots,(x_n,a_n))\hspace{23mm}
+ & \mbox{falls }a_i>1 \mbox{ mit } x_i=x\\
+ ((x_1,a_1),\ldots,(x_{i-1},a_{i-1}),(x_{i+1},a_{i+1}),\ldots,(x_n,a_n))
+ & \mbox{falls }a_i=1 \mbox{ mit } x_i=x
+ \end{array}\right.
+\]
+
+\[
+ \mbox{wieviel}(((x_1,a_1), \ldots ,(x_n,a_n)),x)=\left\{
+ \begin{array}{cc}
+ 0 & \mbox{falls\ } \forall_{1\le i \le n}:x_i \ne x\hspace{89mm}\\
+ a_i & \mbox{mit }x_i=x\hspace{102mm}
+ \end{array}\right.
+\]
+\bigskip
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (b) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+Geben Sie eine konkrete Darstellung (etwa als Java-Klasse
+\texttt{Multimenge}) an.
+Beschreiben Sie die Abstraktionsfunktion,
+sowie die Invarianten, die die g"ultigen Darstellungen
+charakterisieren.
+Geben Sie auch die Vorbedingungen f"ur alle Operatiomen an.
+(Sie d"urfen dabei vern"unftige Einschr"ankungen f"ur die
+verf"ugbaren Operationen machen.)
+\\[5mm]
+%%%%%%%%%%%%%%%%%%%%%% Datentyp %%%%%%%%%%%%%%%%%%%%
+\underline{Datentyp}:
+\begin{verbatim}
+// maximale Anzahl verschiedener Elemente
+static final int maxLänge = 100;
+
+// aktuelle Anzahl verschiedener Elemente
+int länge;
+
+// Array zum Speichern der Elemente
+int[] x;
+
+// Array zum Speichern der Vielfachheiten
+int[] a;
+\end{verbatim}
+
+%%%%%%%%%%%%%%%% Invarianten %%%%%%%%%%%%%%%%%%%
+\underline{Invarianten für eine gültige Darstellung}:
+\begin{enumerate}
+\item
+\texttt{0 <= länge <= maxLänge}
+\item
+\texttt{x.length == a.length == maxLänge}
+\item
+$\forall_{\texttt{int i; 0<=i<l"ange}}:\texttt{ a[i] > 0}$
+\item
+$\forall_{\texttt{int i,j; 0<=i<j<=l"ange}}:\texttt{ x[i] != x[j]}$
+
+\end{enumerate}
+\medskip
+%%%%%%%%%%%%%% Methoden + Vorbedingungen %%%%%%%%%%%%%%%%
+\underline{Methoden und Vorbedingungen}:
+\begin{itemize}
+\item
+\begin{verbatim}
+Multimenge(); // Konstruktor für leer()
+\end{verbatim}
+Keine Vorbedingungen.
+\item
+\begin{verbatim}
+void einfügen(int xx);
+\end{verbatim}
+Vorbedingung:
+$\texttt{länge < maxLänge || }\exists_{\texttt{int i; 0<=i<maxL"ange}}:\texttt{ x[i] == xx}$
+\item
+\begin{verbatim}
+void entfernen(int xx);
+\end{verbatim}
+Keine Vorbedingungen (falls Element nicht enthalten:
+Fehler gemäß Spezifikation).
+\item
+\begin{verbatim}
+int wieviel(int xx);
+\end{verbatim}
+Keine Vorbedingungen.
+\end{itemize}
+
+\medskip
+%%%%%%%%%%%%%%%%%% Abstraktionsfunktion %%%%%%%%%%%%%%%%
+\underline{Abstraktionsfunktion}
+\\
+Die Abstraktionsfunktion bildet eine Instanz der Java-Klasse \texttt{Multimenge}
+(dargestellt durch ein Tupel der Variablen) auf ein Element des Typs MULTI ab.
+\begin{tabbing}
+\setlength{\tabbingsep}{7mm}
+links \= mitte \= \kill
+abst:  \> \texttt{Multimenge }$\rightarrow$ MULTI,\\
+\> \texttt{(länge,x,a)}$\mapsto$ ((\texttt{x[0]}$,$ \texttt{a[0]}),
+\ldots,(\texttt{x[l"ange-1]}$,$ \texttt{a[l"ange-1]}))
+\end{tabbing}
+
+Eine notwendige Eigenschaft für die Abstraktionsfunktion ist die Surjektivität.
+Eine Funktion $f$ ist surjektiv, wenn es zu jedem Element $y$ aus dem Bildraum
+ein Element $x$ aus dem Definitionsraum gibt, so dass $f(x)=y$.
+Für die Abstraktionsfunktion bedeutet das, dass es zu jedem Element des
+mathematischen Modells (mindestens) eine entsprechende Instanz der implementierenden
+Klasse gibt.\\
+Unsere vorliegende Abstraktionsfunktion ist surjektiv (mit der Einschränkung, dass die
+Implementation auf maximal 100 verschiedene Zahlen beschränkt
+ist). Sie ist jedoch nicht injektiv.
+Es gibt also mindestens ein Element des Modells, dem mehr
+als eine Instanz der Java-Klasse entspricht. Man vergleiche z.B. ein
+frisch erzeugtes Objekt mit einem, in das zuvor Elemente eingefügt,
+und dann wieder entfernt wurden. Im frisch erzeugten Objekt ist
+\texttt{länge} = 0 und auch alle Einträge in \texttt{x[]} und
+\texttt{a[]} sind = 0. Haben wir zuvor Elemente eingefügt und wieder
+gelöscht, gilt ebenfalls \texttt{länge} = 0, aber die
+Einträge im Array \texttt{x[]} werden nicht auf 0 zurückgesetzt.
+Beiden Objekten entspricht in der Spezifikation das leere Tupel, somit
+ist die Abstraktionsfunktion nicht injektiv. Ein entsprechendes
+Beispiel lässt sich für jedes Objekt mit \texttt{länge} $<$
+\texttt{maxLänge} konstruieren. Würde man beim Löschen alle
+alten Einträge mit 0 überschreiben, wäre die Funktion injektiiv.
+\bigskip
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+Implementieren Sie die Operationen.
+Sie k"on"-nen von der in der Vorlesung besprochenen
+Implementierung f"ur Mengen mit bis zu 100~Elementen\footnote
+{\url{http://www.inf.fu-berlin.de/~rote/Lere/2003-04-WS/Algorithmen+Programmierung3/Menge.java}}
+ ausgehen.
+\medskip
+
+%Java2TeX style definitions
+%You can modify them to fit your needs
+\newcommand{\jttstylea}{\color[rgb]{1.00,1.00,1.00}} %Background
+\newcommand{\jttstyleb}{\color[rgb]{.501,.501,.501}} %Line numbers
+\newcommand{\jttstylec}{\color[rgb]{.247,.498,.372}} %Multi-line comments
+\newcommand{\jttstyled}{\color[rgb]{.247,.498,.372}} %Single-line comments
+\newcommand{\jttstylee}{\color[rgb]{.498,.000,.333}} %Keywords
+\newcommand{\jttstylef}{\color[rgb]{.164,.000,1.00}} %Strings
+\newcommand{\jttstyleg}{\color[rgb]{.600,.000,.000}} %Character constants
+\newcommand{\jttstyleh}{\color[rgb]{.600,.000,.000}} %Numeric constants
+\newcommand{\jttstylei}{\color[rgb]{.000,.000,.000}} %Parenthesis
+\newcommand{\jttstylej}{\color[rgb]{.498,.000,.333}} %Primitive Types
+\newcommand{\jttstylek}{\color[rgb]{.000,.000,.000}} %Others
+\newcommand{\jttstylel}{\color[rgb]{.498,.623,.749}} %Javadoc keywords
+\newcommand{\jttstylem}{\color[rgb]{.498,.498,.623}} %Javadoc HTML tags
+\newcommand{\jttstylen}{\color[rgb]{.247,.247,.749}} %Javadoc links
+\newcommand{\jttstyleo}{\color[rgb]{.247,.372,.749}} %Javadoc others
+\newcommand{\jttstylep}{\color[rgb]{1.00,.380,.000}} %Undefined
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Java Sourcecode to TeX automatically converted code
+%  Java2Html Converter V4.0 2004by Markus Gebhard  markus@jave.de
+%     Further information: http://www.java2html.de
+{
+\noindent \ttfamily
+\jttstyleo /\verb#*#\verb#*#\\
+\jttstylea ~\jttstyleo \verb#*#~Eine~Menge,~in~der~Elemente~mehrfach~enthalten~sein~dürfen.\\
+\jttstylea ~\jttstyleo \verb#*#/\\
+\jttstylee class~\jttstylek Multimenge~\jttstylei \{\\
+\jttstylea \\
+\jttstylea ~~\jttstyled //~maximale~Anzahl~verschiedener~Elemente\\
+\jttstylea ~~\jttstylee static~final~\jttstylej int~\jttstylek maxLänge~=~\jttstyleh 100\jttstylek ;\\
+\jttstylea \\
+\jttstylea ~~\jttstyled //~aktuelle~Anzahl~verschiedener~Elemente\\
+\jttstylea ~~\jttstylej int~\jttstylek länge;\\
+\jttstylea \\
+\jttstylea ~~\jttstyled //~Array~zum~Speichern~der~Elemente\\
+\jttstylea ~~\jttstylej int\jttstylei []~\jttstylek x;\\
+\jttstylea \\
+\jttstylea ~~\jttstyled //~Array~zum~Speichern~der~Vielfachheiten\\
+\jttstylea ~~\jttstylej int\jttstylei []~\jttstylek a;\\
+\jttstylea \\
+\jttstylea ~~\jttstyleo /\verb#*#\verb#*#\\
+\jttstylea ~~~\jttstyleo \verb#*#~Erzeugt~eine~leere~Multimenge.\\
+\jttstylea ~~~\jttstyleo \verb#*#/\\
+\jttstylea ~~\jttstylek Multimenge\jttstylei ()~\{\\
+\jttstylea ~~~~\jttstylek länge~=~\jttstyleh 0\jttstylek ;\\
+\jttstylea ~~~~\jttstylek x~=~\jttstylee new~\jttstylej int\jttstylei [\jttstylek maxLänge\jttstylei ]\jttstylek ;\\
+\jttstylea ~~~~\jttstylek a~=~\jttstylee new~\jttstylej int\jttstylei [\jttstylek maxLänge\jttstylei ]\jttstylek ;\\
+\jttstylea ~~\jttstylei \}\\
+\jttstylea \\
+\jttstylea ~~\jttstyleo /\verb#*#\verb#*#\\
+\jttstylea ~~~\jttstyleo \verb#*#~Fügt~ein~Element~in~die~Multimenge~ein.\\
+\jttstylea ~~~\jttstyleo \verb#*#~Falls~die~Multimenge~voll~ist,\\
+\jttstylea ~~~\jttstyleo \verb#*#~wird~eine~RuntimeException~ausgelöst.\\
+\jttstylea ~~~\jttstyleo \verb#*#/\\
+\jttstylea ~~\jttstylej void~\jttstylek einfügen\jttstylei (\jttstylej int~\jttstylek xx\jttstylei )~\{\\
+\jttstylea ~~~~\jttstyled //~Prüfe,~ob~das~Element~bereits~enthalten~ist.\\
+\jttstylea ~~~~\jttstylee for~\jttstylei (\jttstylej int~\jttstylek i=\jttstyleh 0\jttstylek ;~i\verb#<#länge;~++i\jttstylei )~\{\\
+\jttstylea ~~~~~~\jttstylee if~\jttstylei (\jttstylek x\jttstylei [\jttstylek i\jttstylei ]~\jttstylek ==~xx\jttstylei )~\{\\
+\jttstylea ~~~~~~~~\jttstyled //~Fall~1:~Das~Element~ist~bereits~enthalten.\\
+\jttstylea ~~~~~~~~\jttstyled //~wir~erhöhen~seine~Vielfachheit.\\
+\jttstylea ~~~~~~~~\jttstylek a\jttstylei [\jttstylek i\jttstylei ]\jttstylek ++;\\
+\jttstylea ~~~~~~~~\jttstylee return\jttstylek ;\\
+\jttstylea ~~~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstyled //~Das~Element~ist~nicht~enthalten.\\
+\jttstylea ~~~~\jttstylee if~\jttstylei (\jttstylek länge~==~maxLänge\jttstylei )~\{\\
+\jttstylea ~~~~~~\jttstyled //~Kein~Platz~frei.~Fehler.\\
+\jttstylea ~~~~~~\jttstylee throw~new~\jttstylek RuntimeException\jttstylei (\jttstylef \verb#"#Kann~nicht~einfügen.~Voll.\verb#"#\jttstylei )\jttstylek ;\\
+\jttstylea ~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstyled //~noch~ein~Platz~frei.~Füge~das~neue~Element\\
+\jttstylea ~~~~\jttstyled //~an~das~Ende~des~Arrays~an~und~passe~die~länge~an.\\
+\jttstylea ~~~~\jttstylek x\jttstylei [\jttstylek länge\jttstylei ]~\jttstylek =~xx;\\
+\jttstylea ~~~~\jttstylek a\jttstylei [\jttstylek länge++\jttstylei ]~\jttstylek =~\jttstyleh 1\jttstylek ;\\
+\jttstylea ~~\jttstylei \}\\
+\jttstylea \\
+\jttstylea ~~\jttstyleo /\verb#*#\verb#*#\\
+\jttstylea ~~~\jttstyleo \verb#*#~entfernt~ein~Element~aus~der~Multimenge.\\
+\jttstylea ~~~\jttstyleo \verb#*#~Wenn~das~Element~nicht~enthalten~ist,\\
+\jttstylea ~~~\jttstyleo \verb#*#~wird~eine~RuntimeException~ausgelöst.\\
+\jttstylea ~~~\jttstyleo \verb#*#/\\
+\jttstylea ~~\jttstylej void~\jttstylek entfernen\jttstylei (\jttstylej int~\jttstylek xx\jttstylei )~\{\\
+\jttstylea ~~~~\jttstyled //~Prüfe,~ob~das~Element~enthalten~ist.\\
+\jttstylea ~~~~\jttstylee for~\jttstylei (\jttstylej int~\jttstylek i=\jttstyleh 0\jttstylek ;~i\verb#<#länge;~++i\jttstylei )~\{\\
+\jttstylea ~~~~~~\jttstylee if~\jttstylei (\jttstylek x\jttstylei [\jttstylek i\jttstylei ]~\jttstylek ==~xx\jttstylei )~\{\\
+\jttstylea ~~~~~~~~\jttstyled //~das~Element~ist~enthalten.~Verringere~die~Vielfachheit\\
+\jttstylea ~~~~~~~~\jttstylee if~\jttstylei (\jttstylek --a\jttstylei [\jttstylek i\jttstylei ]~\jttstylek ==~\jttstyleh 0\jttstylei )~\{\\
+\jttstylea ~~~~~~~~~~\jttstyled //~letztes~x~wurde~entfernt.~Verschiebe~nachfolgende~x~nach~links.\\
+\jttstylea ~~~~~~~~~~\jttstylee for~\jttstylei (\jttstylej int~\jttstylek j=i;~j\verb#<#länge-\jttstyleh 1\jttstylek ;~++j\jttstylei )~\{\\
+\jttstylea ~~~~~~~~~~~~\jttstylek a\jttstylei [\jttstylek j\jttstylei ]~\jttstylek =~a\jttstylei [\jttstylek j+\jttstyleh 1\jttstylei ]\jttstylek ;\\
+\jttstylea ~~~~~~~~~~~~\jttstylek x\jttstylei [\jttstylek j\jttstylei ]~\jttstylek =~x\jttstylei [\jttstylek j+\jttstyleh 1\jttstylei ]\jttstylek ;\\
+\jttstylea ~~~~~~~~~~\jttstylei \}\\
+\jttstylea ~~~~~~~~~~\jttstyled //~Passe~die~Länge~an.\\
+\jttstylea ~~~~~~~~~~\jttstylek länge--;\\
+\jttstylea ~~~~~~~~\jttstylei \}\\
+\jttstylea ~~~~~~~~\jttstylee return\jttstylek ;\\
+\jttstylea ~~~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstyled //~Element~ist~nicht~enthalten.~Fehler.\\
+\jttstylea ~~~~\jttstylee throw~new~\jttstylek RuntimeException\jttstylei (\jttstylef \verb#"#Element~nicht~enthalten.\verb#"#\jttstylei )\jttstylek ;\\
+\jttstylea ~~\jttstylei \}\\
+\jttstylea \\
+\jttstylea ~~\jttstyleo /\verb#*#\verb#*#\\
+\jttstylea ~~~\jttstyleo \verb#*#~Bestimmt,~wie~oft~das~Element~enthalten~ist.\\
+\jttstylea ~~~\jttstyleo \verb#*#/\\
+\jttstylea ~~\jttstylej int~\jttstylek wieviel~\jttstylei (\jttstylej int~\jttstylek xx\jttstylei )~\{\\
+\jttstylea ~~~~\jttstyled //~suche~das~Element.\\
+\jttstylea ~~~~\jttstylee for~\jttstylei (\jttstylej int~\jttstylek i=\jttstyleh 0\jttstylek ;~i\verb#<#länge;~++i\jttstylei )~\{\\
+\jttstylea ~~~~~~\jttstylee if~\jttstylei (\jttstylek x\jttstylei [\jttstylek i\jttstylei ]~\jttstylek ==~xx\jttstylei )~\{\\
+\jttstylea ~~~~~~~~\jttstyled //~Element~gefunden.~Gib~seine~Vielfachheit~zurück.\\
+\jttstylea ~~~~~~~~\jttstylee return~\jttstylek a\jttstylei [\jttstylek i\jttstylei ]\jttstylek ;\\
+\jttstylea ~~~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstylei \}\\
+\jttstylea ~~~~\jttstyled //~Element~ist~nicht~enthalten.~Rückgabe~0.\\
+\jttstylea ~~~~\jttstylee return~\jttstyleh 0\jttstylek ;\\
+\jttstylea ~~\jttstylei \}\\
+\jttstylei \}\\
+}
+\vspace{3mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Korrektheitsbeweis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+Beweisen Sie die Korrektheit Ihrer Implementierung.
+\\[2mm]
+\underline{Korrektheit der Invarianten für eine gültige Darstellung}
+\begin{itemize}
+\item
+\texttt{Multimenge()}
+\begin{enumerate}
+\item
+Erfüllt, da \texttt{länge=0}.
+\item
+Die Arrays werden entsprechend initialisiert.
+\item
+Kein \texttt{i}, für das es gelten müsste.
+\item
+Keine \texttt{i},\texttt{j} für das es gelten müsste.
+\end{enumerate}
+\item
+\texttt{void einfügen(int xx)}
+\begin{enumerate}
+\item
+\begin{itemize}
+\item
+\texttt{länge>=0} -- klar, da \texttt{länge} nicht verringert wird.
+\item
+\texttt{länge<=maxLänge} -- erfüllt, da \texttt{länge} nur um eins
+erhöht wird, wenn \texttt{länge<maxLänge}
+\end{itemize}
+\item
+Längen der Arrays bleiben unverändert.
+\item
+\texttt{a[i]} wird erhöht und \texttt{länge} bleibt konstant
+(also kein neues \texttt{i} für das \texttt{a[i]>0} gelten muss),
+oder \texttt{länge} wird um 1 erhöht und \texttt{a[länge-1]=1 > 0}.
+\item
+Falls \texttt{x[i]==xx} für ein \texttt{i} oder \texttt{länge == maxLänge},
+dann werden \texttt{x} und \texttt{länge} nicht verändert.
+Ansonsten ist \texttt{xx} ein neues Element und von allen Einträgen in
+\texttt{x} verschieden. Dann wird \texttt{länge} um 1 erhöht und \texttt{xx}
+als neues Element in \texttt{x} aufgenommen.
+\end{enumerate}
+\bigskip
+\item
+\texttt{void entfernen(int xx)}
+\begin{enumerate}
+\item
+\begin{itemize}
+\item
+\texttt{länge>=0} -- die for-Schleife, in der \texttt{länge} dekrementiert wird,
+wird nur betreten, falls \texttt{länge>0}.
+\item
+\texttt{länge>=maxLänge} -- klar, da \texttt{länge} nicht vergrößert wird.
+\end{itemize}
+\item
+bleibt unverändert.
+\item
+Mit \texttt{if (--a[i]==0)} wird diese Invariante explizit geprüft.
+Falls sie nicht erfüllt sein sollte, wird der obere Teil von \texttt{x}
+nach links verschoben und \texttt{länge} entsprechend angepasst.
+\item
+Ist erfüllt, da kein neuer Wert in das Array \texttt{x} eingefügt wird.
+\end{enumerate}
+\item
+\texttt{int wieviel(int xx)}
+\\[1mm]
+Ist klar, da dies eine sondierende Funktion ist und keine Änderungen
+am Objekt vorgenommen werden.
+\end{itemize}
+\underline{Übereinstimmung mit der Spezifikation}
+\begin{itemize}
+\item
+\underline{zz}: leer() = abst(\texttt{new Multimenge()})\\[2mm]
+\underline{Beweis}:\\
+L.S. leer() = ()
+R.S. abst(\texttt{new Multimenge()}) = abst(\texttt{(0,[],[])}) = ()\\
+$$\Box$$
+\item
+\begin{tabbing}
+\setlength{\tabbingsep}{17mm}
+links \= mitte \= rechts \= \kill
+\underline{zz}:\>
+$\forall$\texttt{ Multimenge mm, int x} :
+einfügen(abst(\texttt{mm}),x) = abst(\texttt{mm.einfügen(x)})\\
+\>(wobei \texttt{mm} den Vorbedingungen für \texttt{einfügen} entspricht.)
+\end{tabbing}
+\medskip
+\underline{Beweis}:\\
+L.S. einfügen(abst(\texttt{(l,x[],a[])}),$y$)
+= einfügen(((\texttt{x[0]},\texttt{a[0]}),\ldots,(\texttt{x[l-1]},\texttt{a[l-1]})),$y$)
+\[
+ \hspace{-3mm}=\left\{
+ \begin{array}{cc}
+ ((\texttt{x[0]},\texttt{a[0]}),\ldots,(\texttt{x[l-1]},\texttt{a[l-1]}),(y,1))\hspace{21mm}
+ & \mbox{falls\ } \forall_{0\le \texttt{i} \le \texttt{l-1}}:\texttt{x[i]}\ne y
+ \\
+ ((\texttt{x[0]},\texttt{a[0]}),\ldots,(\texttt{x[i]},\texttt{a[i]+1}),\ldots,(\texttt{x[l-1]},\texttt{a[l-1]}))
+ & \mbox{mit }\texttt{x[i]}=y\hspace{19mm}
+ \end{array}\right.
+\]
+R.S. abst(\texttt{(l,x[],a[]).einfügen(y)})
+\[
+ \hspace{0mm}=\left\{
+ \begin{array}{cc}
+ \mbox{abst}(\texttt{RuntimeException})\hspace{5mm}
+ & \mbox{falls } \forall_{0\le \texttt{i} \le \texttt{l-1}}:\texttt{x[i]}\ne\texttt{y}
+ \land \texttt{l}\ge \texttt{maxL"ange}\hspace{0mm}
+ \\
+ &\mbox{(\texttt{mm} erfüllt die Vorbedingungen }\hspace{16mm}
+ \\
+ & \mbox{nicht, also unmöglicher Fall.)}\hspace{18mm}
+ \\[2mm]
+ \mbox{abst}(\texttt{(l+1,x'[],a'[])}),\hspace{6mm}
+ & \mbox{falls } \forall_{0\le \texttt{i} \le \texttt{l-1}}:\texttt{x[i]}\ne\texttt{y}
+ \land \texttt{l}<\texttt{maxLänge}
+ \\
+ & \mbox{ mit }\texttt{x'[]=x[]} \mbox{ und } \texttt{a'[]=a[]},\hspace{20mm}
+ \\
+ & \mbox{ wobei }\texttt{x'[l]=y} \mbox{ und } \texttt{a'[l]=1}\hspace{21mm}
+ \\[2mm]
+ \mbox{abst}(\texttt{(l,x[],a'[])}),\hspace{10mm}
+ & \mbox{mit } \texttt{x[i]}=\texttt{y}\hspace{45mm}
+ \\
+ & \mbox{ und }\texttt{a'[]=a[]},\mbox{ wobei } \texttt{a'[i]=a[i]+1}\hspace{10mm}
+ \end{array}\right.
+\]
+
+\[
+ \hspace{-3mm}=\left\{
+ \begin{array}{cc}
+ ((\texttt{x[0]},\texttt{a[0]}),\ldots,(\texttt{x[l-1]},\texttt{a[l-1]}),(\texttt{y},1))\hspace{21mm}
+ & \mbox{falls\ } \forall_{0\le \texttt{i} \le \texttt{l-1}}:\texttt{x[i]}\ne \texttt{y}
+ \\
+ ((\texttt{x[0]},\texttt{a[0]}),\ldots,(\texttt{x[i]},\texttt{a[i]+1}),\ldots,(\texttt{x[l-1]},\texttt{a[l-1]}))
+ & \mbox{mit }\texttt{x[i]}=\texttt{y}\hspace{19mm}
+ \end{array}\right.
+\]
+
+
+$$\Box$$
+Anmerkung: Das $y$ der linken Seite ist $kursiv$, und das \texttt{y} der rechten
+Seite \texttt{monospaced}. Eigentlich bräuchte man noch eine Abstraktionsfunktion vom Computer-Int auf die
+ganzen Zahlen, die das umwandelt.
+\item
+\begin{tabbing}
+\setlength{\tabbingsep}{17mm}
+links \= mitte \= rechts \= \kill
+\underline{zz}:\>
+$\forall$\texttt{ Multimenge mm, int x} :
+entfernen(abst(\texttt{mm}),x) = abst(\texttt{mm.entfernen(x)})
+\end{tabbing}
+\underline{Beweis}: eingespart
+\item
+\begin{tabbing}
+\setlength{\tabbingsep}{17mm}
+links \= mitte \= rechts \= \kill
+\underline{zz}:\>
+$\forall$\texttt{ Multimenge mm, int x} :
+wieviel(abst(\texttt{mm}),x) = abst(\texttt{mm.wieviel(x)})
+\end{tabbing}
+\underline{Beweis}: eingespart
+\end{itemize}
+\medskip
+\newpage
+\end{enumerate}
+\item Das gleiche über eine Algebraische Spezifikation.
+\begin{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Algebraische Spezifikation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+\underline{Algebraische Spezifikation}
+\\[3mm]
+\underline{Typen}:\hspace{3mm}MULTI, INT, NAT
+\\[2mm]
+\underline{Operationen}:
+\\[1mm]
+$\mbox{leer:} \rightarrow \mbox{MULTI} \\
+\mbox{einf"ugen: MULTI} \times \mbox{INT} \rightarrow \mbox{MULTI} \\
+\mbox{entfernen: MULTI} \times \mbox{INT} \rightarrow \mbox{MULTI} \\
+\mbox{wieviel: MULTI} \times \mbox{INT} \rightarrow \mbox{NAT}$
+\\[3mm]
+\underline{Axiome}:
+\\[1mm]
+wieviel(leer(), $x$) = 0
+\[
+ \mbox{wieviel}(\mbox{einf"ugen}(M,x),y)=\left\{
+ \begin{array}{cc}
+ \mbox{plus}(1,\mbox{wieviel}(M,y))
+ & \mbox{f"ur } x=y\hspace{43mm}
+ \\
+ \mbox{wieviel}(M,y)\hspace{12mm}
+ & \mbox{f"ur } x \ne y\hspace{43mm}
+ \end{array}\right.
+\]
+
+\[
+ \mbox{wieviel}(\mbox{entfernen}(M,x),y)=\left\{
+ \begin{array}{cc}
+ \mbox{max}(0,\mbox{plus}(-1,\mbox{wieviel}(M,y)))
+ & \mbox{f"ur } x=y\hspace{26mm}
+ \\
+ \mbox{wieviel}(M,y)\hspace{27mm}
+ & \mbox{f"ur } x \ne y\hspace{26mm}
+ \end{array}\right.
+\]
+%\medskip
+In der algebraischen Spezifikation eines Datentypen geben wir kein Modell an,
+sondern spezifizieren den Datentypen durch Operationen. Bei den Operationen
+unterscheiden wir zwischen \emph{erzeugenden}, \emph{verändernden} und \emph{sondierenden} Operationen.
+Erzeugende Operationen erzeugen ein Element des Datentyps, verändernde Operationen verändern es
+und sondierende Operationen liefern uns seine Eigenschaften.
+Die Operationen werden durch \emph{Axiome} spezifiziert, und zwar die erzeugenden und verändernden
+mit Hilfe der sondierenden.
+\\[2mm]
+Zwei Eigenschaften sind für eine algebraische Spezifikation wichtig:~~Sie muss
+\emph{vollständig} und \emph{widerspruchsfrei} sein. Vollständigkeit bedeutet,
+dass jede mögliche Folge von Operationen spezifiziert ist. Widerspruchsfreiheit bedeutet,
+dass sich aus einer Folge nicht zwei verschiedene Ergebnisse ableiten lassen.
+\\[2mm]
+In der vorliegenden Spezifikation ist \texttt{leer} eine erzeugende Operation,
+sind \texttt{einfügen} und \texttt{entfernen} verändernde Operationen und
+\texttt{wieviel} eine sondierende Operation. Die Spezifikation ist vollständig,
+da jede Multimenge als Eingabe für \texttt{wieviel} (dies ist die einzige sondierende Funktion)
+auf \texttt{leer} abgeleitet werden kann. Die Spezifikation ist widerspruchsfrei,
+da es für jeden Fall genau eine mögliche Ableitung gibt (hinreichende Bedingung).
+\\[2mm]
+Anmerkung: Diese Spezifikation ist nicht "aquivalent zu der modellierenden aus dem ersten Teil.
+Dort war der Aufruf von entfernen (leer, x) undefiniert und wurde mit dem Ausl"osen eines Fehlers
+implementiert. Hier wird dieser Aufruf einfach ignoriert. M"ochte man die algebraische Spezifikation
+"aquivalent zur modellierenden machen, m"usste man noch einen dritten Fall einf"ugen anstatt das
+Maximum zu nehmen. M"ochte man die modellierende Spezifikation "aquivalent zur algebraischen machen,
+gibt man im entsprechenden Fall einfach die Eingabe unver"andert zur"uck.
+
+\vspace{3mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Haskell Programm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+\underline{Implementation in Haskell}
+\begin{verbatim}
+data Multi = Leer | Einfügen Int Multi | Entfernen Int Multi
+
+wieviel :: Multi -> Int -> Int
+wieviel Leer x = 0
+wieviel (Einfügen x m) y | x == y    = 1 + wieviel m y
+                         | otherwise = wieviel m y
+
+wieviel (Entfernen x m) y | x == y    = max 0 (wieviel m y - 1)
+                          | otherwise = wieviel m y
+\end{verbatim}
+\vspace{3mm}
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Korrektheit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+\underline{Korrektheit der Implementation}
+\\[2mm]
+Die Korrektheit der Implementation beweist man wie im ersten Fall in zwei Schritten.
+Zuerst zeigt man, dass die Invarianten für eine gültige Darstelung erfüllt sind.
+In unserer Implementierung gibt es keine solche Invarianten, also ist nichts zu zeigen.
+
+Anschließend zeigt man, dass die Implementation der Spezifikation entspricht.
+Für die modellierende Spezifikation haben wir zu diesem Zweck eine Abstraktionsfunktion
+definiert, die jedem \texttt{Multimenge}-Objekt ein Modell vom Typ MULTI zuordnet.
+Für eine Algebraische Spezifikation ist es nicht möglich, eine Abstraktionsfunktion zu
+definieren -- auf was sollte man auch abbilden, es gibt ja kein Modell.
+Eine Abstraktionsfunktion ist aber auch nicht nötig, denn wir haben ja die Axiome.
+
+Um die Übereinstimmung einer Implementation mit einer algebraischen Spezifikation
+nachzuweisen, gehen wir die Axiome der Reihe nach durch.
+Jedes einzelne Axiom muss für jede beliebige Eingabe gelten.
+Als Beweisverfahren bietet sich hierzu die strukturelle Induktion an.
+In unserer Haskell-Implementierung ist nichts zu zeigen, da sie sich nur
+syntaktisch von der Spezifikation unterscheidet. Interessanter wäre es,
+den Beweis für die Java-Implementierung zu führen.
+Dies sei dem Leser überlassen.
+
+Das bekannteste Zitat zum Thema Spezifikation stammt von Donald Knuth:
+\vspace{3mm}
+\center{
+\textit{I have proven that this program is correct, but I haven't tested it.}}
+\end{enumerate} % Ende Zusatz f)
+\end{enumerate} %Ende Aufgabe 57
+\eject
+\end{document}

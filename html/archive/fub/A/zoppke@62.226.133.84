@@ -1,0 +1,160 @@
+Lösungen von Stephan Berndts (berndts-alp@mi.fu-berlin.de)
+
+Aufgabe 1
+
+a) Aus (:) :: a -> [a] -> [a] und 7::Int folgt
+   x :: [Int]
+
+b) Aus (||) :: Bool -> Bool -> Bool und True::Bool folgt
+   x :: Bool -> Int
+
+c) Aus 1.0::Float und (+) folgt
+   (p+1.0) :: Float und p::Float.
+   Aus Plus :: a -> b -> T a b, und (p+1.0)::Float folgt
+   Plus (p+1.0) q :: T Float b.
+   Damit folgt dann zusammen mit (:)
+   x :: Float -> b -> [T Float b] -> [T Float b]
+
+d) Aus map :: (a -> b) -> [a] -> [b] und
+   filter :: (c -> Bool) -> [c] -> [c] folgt
+   a::(c -> Bool) und b::([c] -> [c]).
+   Damit folgt dann
+   x :: [(c -> Bool)] -> [([c] -> [c])].
+
+Aufgabe 2
+
+> data Geo = Punkt (Float,Float)                |  -- Punkt (x,y)
+>            Rechteck (Float,Float) Float Float |  -- Rechteck (x,y) h b
+>            Quadrat (Float,Float) Float           -- Quadrat (x,y) s
+
+instance Eq Geo kann als gegeben betrachtet werden.
+Zum Testen aber folgende Definiton:
+
+> instance Eq Geo where
+>     (Rechteck (x1,y1) h1 b1) == (Rechteck (x2,y2) h2 b2) =
+>         x1 == x2 && y1 == y2 && b1 == b2 && h1 == h2
+> 
+>     g1 == g2 = toRechteck g1 == toRechteck g2
+
+Es ist nicht besonders schlau, alle Faelle einzeln zu pruefen. Das
+waere natuerlich auch richtig! Da aber Punkte und Quadrate als
+Rechteck auffassbar sind, gibt es eine sehr elegante Loesung:
+
+> instance Ord Geo where
+>     (Rechteck (x1,y1) h1 b1) <= (Rechteck (x2,y2) h2 b2) =
+>         x1 >= x2       && y1 >= y2 &&
+>         x1+b1 <= x2+b2 && y1+h1 <= y2+h2
+> 
+>     g1 <= g2 = toRechteck g1 <= toRechteck g2
+> 
+> toRechteck :: Geo -> Geo
+> toRechteck (Punkt k)        = Rechteck k 0 0
+> toRechteck (Quadrat k s)    = Rechteck k s s
+> toRechteck (Rechteck k h b) = Rechteck k h b
+
+Aufgabe 3
+
+a)
+
+> fun :: Num a => [a] -> a
+> fun = sum.(map (\x -> x*x)) 
+
+b)
+
+> suff :: Eq a => [a] -> [a] -> Bool
+> suff xs ys = xs == ys || (length ys /= 0 && (suff xs (tail ys))) 
+
+c)
+
+> gerade :: [Int] -> Int
+> gerade = length.(filter even)
+
+d)
+
+> kl :: Ord a => (Int -> a) -> a -> Int
+> kl f y = head [x | x <- [0..], f x <= y]
+
+Aufgabe 4
+
+a)
+
+> data TernBaum a = Leer |
+>                   Blatt a | 
+>                   Knoten a (TernBaum a) (TernBaum a) (TernBaum a)
+
+Um ganz sicher zu gehen, daß nur gültige Bäume betrachtet werden,
+gibt es hier eine Funktion, die die Gültigkeit überprüft.
+
+> gueltig :: TernBaum a -> Bool
+> gueltig Leer                = True
+> gueltig (Blatt _)           = True
+> gueltig (Knoten _ Leer _ _) = False
+> gueltig (Knoten _ _ Leer _) = False
+> gueltig (Knoten _ _ _ Leer) = False
+> gueltig (Knoten _ t1 t2 t3) = all gueltig [t1,t2,t3]
+
+> hoehe, hoehe2 :: TernBaum a -> Int
+> hoehe baum
+>      | not (gueltig baum)  = error "Baum ungueltig"
+>      | otherwise           = hoehe2 baum
+> hoehe2 Leer                = error "Baum leer"
+> hoehe2 (Blatt _)           = 0
+> hoehe2 (Knoten _ t1 t2 t3) = 1 + maximum (map hoehe [t1,t2,t3])
+
+b)
+
+> bal, bal2 :: TernBaum a -> Bool
+> bal baum
+>    | not (gueltig baum)  = error "Baum ungueltig"
+>    | otherwise           = bal2 baum
+> bal2 Leer                = error "Baum leer"
+> bal2 (Blatt _)           = True
+> bal2 (Knoten _ t1 t2 t3) = and (map bal [t1,t2,t3]) &&
+>                            all (==) (map hoehe [t1,t2,t3])
+
+c)
+
+Beh: Anzahl Blätter = 3^h
+Beweis durch strukturelle Induktion über die Höhe des Baumes.
+
+Ind.Anf.: hoehe t = 0, also t = Blatt x
+3^0 = 1
+
+Ind.Vor.: Beh. gilt für balancierten Baum t der Höhe h.
+z.z.: Beh. gilt dann auch für balancierten Baum t' der Höhe h+1.
+
+Dieser kann folgendermaßen konstruiert werden:
+t' = Knoten x t t t
+
+Für diesen gilt dann: anzBlaetter (Knoten x t t t) = 3 anzBlaetter
+(t) = 3 3^h = 3^{h+1}
+
+q.e.d.
+
+Aufgabe 5
+
+Die "module"-Definition ist auskommentiert, damit Hugs nicht meckert.
+
+ module BinaerBaum (BBaum, machBaum, gibAus,
+                    wieGross, vereinige, zerlege) where
+
+> data BBaum a = BBlatt a | BKnoten a (BBaum a) (BBaum a)
+
+> machBaum :: a -> BBaum a
+> machBaum x = BBlatt x
+
+> gibAus :: BBaum a -> [a]
+> gibAus (BBlatt x)        = [x]
+> gibAus (BKnoten x b1 b2) = x:gibAus b1 ++ gibAus b2
+
+> wieGross :: BBaum a -> Int
+> wieGross (BBlatt _)        = 1
+> wieGross (BKnoten _ b1 b2) = wieGross b1 + wieGross b2
+
+> vereinige :: a -> BBaum a -> BBaum a -> BBaum a
+> vereinige x b1 b2 = BKnoten x b1 b2
+
+> zerlege :: BBaum a -> (BBaum a, BBaum a)
+> zerlege (BBlatt _)        = error "Baum hat nur Wurzel"
+> zerlege (BKnoten _ b1 b2) = (b1, b2)
+
